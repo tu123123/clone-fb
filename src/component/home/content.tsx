@@ -126,7 +126,7 @@ const ModalCreateBlog=({onClose}:ModalCreateBlogType)=>{
     </ImgCrop>
         <div className='listimg'>
         {upimg.map((i:any)=>{
-        return <img src={i.src}></img>
+        return <img key={i.src} src={i.src}></img>
     })}
         </div>
         </div>
@@ -204,7 +204,7 @@ const CommentItem=({rep=true,onRef,value}:{rep?:boolean,onRef?:any,value:any})=>
         {!showrep&&value.comments?<div ref={(e:any)=>setRep(e)} onClick={()=>{
                 setShowrep(true)
             }} className='repcomment showrepcomment'>Có {countCmt(value)} phản hồi</div>:value.comments?.map((i:any)=>{
-            return  <div key={i.idcmt} className='repcomment'>
+            return  <div key={i.idcmt||i.comment} className='repcomment'>
             <CommentItem rep={i.comments} onRef={setRep} value={i}></CommentItem></div>
         })  }
         {repinput&&<CommentInput setRep={setRep}  value={value}></CommentInput>}

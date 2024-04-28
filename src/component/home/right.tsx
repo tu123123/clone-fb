@@ -7,12 +7,12 @@ import { HomeContext } from '@/app/page'
 import { where } from 'firebase/firestore'
 export function ListContract(){
     let user=getUser()
-    const [users,setUsers]=useState()
+    const [users,setUsers]=useState<any>()
     useEffect(()=>{
         if(user)
         getData2('user',(e:any)=>{
             setUsers(e||[])
-        },)
+        },()=>{})
 
     },[])
 
@@ -26,7 +26,7 @@ export function ListContract(){
         color:'white'
     }}>Không có dữ liệu</div>:users?.map((i:any)=>{
 
-                return <div className='UserItem'>
+                return <div key={i.id} className='UserItem'>
                 <Avatar></Avatar> <p>{i.name}</p>
                
             </div>

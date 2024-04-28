@@ -17,7 +17,7 @@ export default function Home() {
             <div className="home-container">
       
         <div className="home-left"><LeftContent></LeftContent></div>
-        <div className="home-content"><HomeContent></HomeContent></div>
+        <div className="home-content"><HomeContent home={false}></HomeContent></div>
         <div className="home-right"><ListContract></ListContract></div>
       </div>
     </HomeContext.Provider>
