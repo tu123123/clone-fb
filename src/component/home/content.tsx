@@ -142,7 +142,7 @@ const AddStatus=()=>{
     </div>
 }
 const countCmt=(data:any,count=0)=>{
-    console.log(data)
+  
     const loop=(value=data.comments)=>{
         
         if(value)
@@ -340,7 +340,7 @@ export default function HomeContent({home}:{home:boolean}){
         <AddStatus></AddStatus>
     {
         blogs?.map((i:any)=>{
-            return <Blog data={i} key={i.key}></Blog>
+            return <Blog data={i} key={i.id}></Blog>
         })
     }
 
