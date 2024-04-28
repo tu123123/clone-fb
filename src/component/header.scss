@@ -1,0 +1,70 @@
+.header-component{
+    background: rgb(57, 57, 57);
+    display: grid;
+    padding: 0px 20px;
+    height: 60px;
+    align-items: center;
+    grid-template-columns: max-content 1fr max-content;
+    .bottion-icon{
+        display: flex;
+        color: white;
+        align-items: center;
+        gap: 5px;
+        justify-content: center;
+        border-radius: 5px;
+        cursor: pointer;
+        img{
+            height: 30px;
+        }
+        &:hover{
+            background: rgb(93, 92, 92);
+        }
+        padding: 5px 30px;
+    }
+    .user-icon{
+        gap:10px
+    }
+    .user-button{
+        display: flex;
+        height: 40px;
+        width:  40px;
+        justify-content: center;
+        align-items: center;
+        background: rgba(128, 128, 128, 0.578);
+        border-radius: 50%;
+        cursor: pointer;
+        img{
+            height: 20px;
+        }
+        &:hover{
+            background: rgb(93, 92, 92);
+        }
+        padding: 8px ;
+    }
+    .user-avatar{
+   
+        height: 40px;
+        width: 40px;
+     
+       img{
+        border-radius: 50%;
+        object-fit: cover;
+        height: 100%;
+        width: 40px;
+       }
+    }
+    >div{
+        justify-content: center;
+        display: flex;
+        gap: 5px;
+    }
+    .logo{
+        cursor: pointer;
+        border-radius: 50%;
+        img{
+            height: 40px;
+           
+            
+        }
+    }
+}

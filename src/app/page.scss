@@ -1,0 +1,27 @@
+
+.home-container{
+    display: grid;
+    grid-template-columns: 1fr 700px 1fr;
+    gap: 10px;
+    height: calc(100vh - 60px);
+    overflow: auto;
+    scrollbar-color:rgb(67, 67, 67) rgba(136, 136, 136, 0.362);
+    @media screen and (max-width:1355px) {
+        grid-template-columns: 0px 1fr 300px;
+        .LeftContent{
+            display: none;
+        }
+    }
+    @media screen and (max-width:950px) {
+        grid-template-columns: 0px 1fr 0px;
+        .ListContract{
+            display: none;
+        }
+    }
+    .home-content{
+        
+     
+        display: grid;
+        grid-auto-rows: max-content;
+    }
+}

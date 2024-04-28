@@ -1,0 +1,79 @@
+.Modal{
+
+    position: fixed;
+    top: 0;
+    left: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    z-index: 10;
+    width: 100vw;
+    background: rgba(50, 50, 50, 0.746);
+    .modal-form{
+        animation: modalani 0.5s;
+        .modal-body{
+            overflow: auto;
+        }
+        min-height: 200px;
+        min-width: 200px;
+        max-height: 90vh;
+        overflow: auto;
+        max-width: 90vw;
+        background: white;
+        display: grid;
+        grid-template-rows: max-content 1fr max-content;
+        border-radius: 10px;
+        .modal-header{
+            display: flex;
+            font-size: 20px;
+            font-weight: 600;
+            justify-content: space-between;
+            padding: 10px;
+        }
+    }
+    .modal-close{
+        cursor: pointer;
+        transition: 0.2s;
+        &:hover{
+            transform: rotate(90deg);
+   
+        }
+        img{
+            height: 40px;
+        }
+
+    }
+    .modal-footer{
+        gap: 10px;
+        align-items: center;
+        padding: 10px;
+        display: flex;
+        justify-content: end;
+    
+       
+    }
+}
+@keyframes modalani {
+    0%{
+        opacity: 0;
+        transform: translateY(-50px);
+    }
+}
+.dangky{
+    cursor: pointer;
+    &:hover{
+        text-decoration: underline;
+    }
+    color: rgb(65, 144, 255);
+}
+.formlogin{
+    input{
+        font-size: 20px;
+    }
+    display: grid;
+    gap: 5px;
+    min-width: 400px;
+    padding: 20px 30px;
+  
+}

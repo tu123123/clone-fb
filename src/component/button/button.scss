@@ -1,0 +1,11 @@
+.button{
+    padding: 5px 10px;
+    &:hover{
+        background: rgba(70, 70, 70, 0.986);
+    }
+    cursor: pointer;
+    width: max-content;
+    img{
+        height: 20px;
+    }
+}

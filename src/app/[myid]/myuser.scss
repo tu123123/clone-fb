@@ -1,0 +1,108 @@
+.MyUser{
+    height: calc(100vh - 60px);
+    width: 100vw;
+    .mycontent{
+        width: 60vw;
+        margin: auto;
+    }
+   
+
+    overflow: auto;
+    scrollbar-color:rgb(67, 67, 67) rgba(136, 136, 136, 0.362);
+    .MyUser-background{
+        background-size: cover !important;
+        background-position: center;
+        .ant-upload-list-item{
+            display: none;
+        }
+        height: 400px;
+        width: 100%;
+        display: flex;
+        justify-content: end;
+        align-items: end;
+        background: gray;
+        .button{
+            margin: 10px;
+        }
+        
+    }
+    .user-info{
+        display: flex;
+        font-size: 30px;
+        font-weight: bold;
+        color: white;
+
+    }
+    .MyUser-avatar{
+        background: black;
+
+        background-size: cover !important;
+        background-position: center;
+        height: 200px;
+         margin: 20px;
+         margin-top: -60px;
+         border-radius: 50%;
+        width: 200px;
+        display: flex;
+        justify-content: end;
+        align-items: end;
+        .edit{
+            .ant-upload-list-item{
+                display: none;
+            }
+            button{
+                height: auto;
+                background: none;
+                border: none;
+                width: auto;
+                padding: 0 !important;
+                border-radius: 50%;
+            }
+            margin: 5px;
+            margin-top: -30px;
+            img{
+                &:hover{
+                    background: rgb(188, 188, 188);
+                }
+                cursor: pointer;
+                border-radius: 50%;
+                padding: 6px;
+                background: gray;
+                min-width: 40px;
+                max-width: 40px
+            }
+        }
+    }
+    .user-homebody{
+        border-top: 1px solid gray;
+       display: grid;
+       grid-template-columns: 40% 1fr;
+       padding: 10px;
+        max-width: 100vw;
+        gap: 10px;
+        margin: auto;
+        .detail-user{
+            margin-top: 20px;
+            border-radius: 5px;
+            padding: 10px;
+            height: fit-content;
+            background: rgb(47, 47, 47);
+            .detail-header{
+                font-size: 20px;
+                font-weight: bold;
+                color: rgb(203, 203, 203);
+            }
+        }
+        .button-detail{
+            cursor: pointer;
+            &:hover{
+                background: rgb(102, 102, 102);
+            }
+            background: rgb(31, 31, 31);
+            color: rgb(190, 190, 190);
+            padding: 10px;
+            margin-top: 10px;
+            border-radius: 5px;
+        }
+    }
+}

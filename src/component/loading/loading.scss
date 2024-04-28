@@ -1,0 +1,21 @@
+.loading{
+    display: flex;
+    position: absolute;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    z-index: 20;
+    img{
+        height: 50px;
+        animation: aniLoad 1s infinite linear;
+    }
+    align-items: center;
+    justify-content: center;
+    left: 0;
+    background: rgba(255, 255, 255, 0.788);
+}
+@keyframes aniLoad {
+     0%{
+        transform: rotate(-360deg);
+     }
+}
