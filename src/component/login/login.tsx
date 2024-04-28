@@ -160,10 +160,19 @@ export default function Login({onClose}:LoginType){
         <>
         <div onClick={()=>setDangky(false)} className='dangky'>Đăng nhập</div><Button onClick={()=>{
             setLoading(true)
-            addData('user',user,()=>{
-                setDangky(false)
-                setLoading(false)
-            })
+            getData2('user',(e:any)=>{
+                if(e[0]) { openNotification(api,'Tên đăng ký đã tồn tại!').warning()
+                    setLoading(false)
+                }
+                else
+                    addData('user',user,()=>{
+                        setDangky(false)
+                        setLoading(false)
+                        openNotification(api,'Đăng ký thành công!').warning()
+                    })
+               
+            },where('userid','==',user?.userid))
+          
         }} style={{
             fontSize:20,
             height:45
@@ -184,6 +193,7 @@ export default function Login({onClose}:LoginType){
                   id:e[0].id,
                   userid:e[0].userid
                 }),{ expires: 360 })
+                window.location.reload();
             },and(where('userid','==',userLogin.userid),where('password','==',userLogin.password)))
         }}
         style={{

@@ -5,14 +5,20 @@ import { icon } from '../icon'
 import Link from 'next/link'
 import { getUser } from './content'
 import { useEffect, useState } from 'react'
+import { getData2 } from '../firebase/config'
+import { documentId, where } from 'firebase/firestore'
 export default function LeftContent(){
     const [user,setUser]=useState<any>()
     useEffect(()=>{
-      setUser(getUser())
+        if(getUser())
+        getData2('user',(e:any)=>{
+         
+            setUser(e[0])
+        },where(documentId(),'==',getUser()?.id))
     },[])
     return <div className='LeftContent'>
         {user&&<Link href={'/'+user?.name}> <div className='LeftContent-item user'>
-            <Avatar></Avatar> <p>{user?.name}</p>
+            <Avatar img={user.imgURL}></Avatar> <p>{user?.name}</p>
         </div></Link>}
        
         <div className='LeftContent-item'>

@@ -12,6 +12,7 @@ import { imgDb,addData, getData,updateData, getData2  } from '../firebase/config
 import { Button, Upload } from 'antd';
 import { HomeContext } from '@/app/page'
 import moment from 'moment'
+import { documentId, where } from 'firebase/firestore'
 const CommentContext= createContext<any>({})
 const Card=()=>{
 
@@ -45,9 +46,11 @@ export const getUser=()=>{
     if(!Cookies.get('user')) return null
     return JSON.parse(Cookies.get('user') as string)
 }
-export const Avatar=()=>{
+export const Avatar=({img}:{img?:string})=>{
+
+    
     return <div  style={{
-        backgroundImage:'url("https://images.fpt.shop/unsafe/filters:quality(90)/fptshop.com.vn/uploads/images/tin-tuc/169746/Originals/avatar-anime.jpg")'}} className='avatar'></div>
+        backgroundImage:`url("${img||"https://images.fpt.shop/unsafe/filters:quality(90)/fptshop.com.vn/uploads/images/tin-tuc/169746/Originals/avatar-anime.jpg"}")`}} className='avatar'></div>
 }
 interface ModalCreateBlogType{
     onClose:()=>void
@@ -135,10 +138,11 @@ const ModalCreateBlog=({onClose}:ModalCreateBlogType)=>{
 }
 const AddStatus=()=>{
     const [open,setOpen]=useState(false)
+    const {user}:any=useContext(HomeContext)
     return <div className='AddStatus'>
         {open&&<ModalCreateBlog onClose={()=>setOpen(false)}></ModalCreateBlog>}
-        <Avatar></Avatar>
-        <div onClick={()=>setOpen(true)} className='AddStatus-button'>Bạn đang nghĩ gì thế?</div>
+        <Avatar img={user?.imgURL}></Avatar>
+        <div onClick={()=>user&&setOpen(true)} className='AddStatus-button'>{user?'Bạn đang nghĩ gì thế?':'Bạn cần đăng nhập để đăng bài'}</div>
     </div>
 }
 const countCmt=(data:any,count=0)=>{
@@ -157,7 +161,7 @@ const countCmt=(data:any,count=0)=>{
     loop()
     return count
 }
-const CommentItem=({rep=true,onRef,value}:{rep?:boolean,onRef?:any,value:any})=>{
+const CommentItem= ({rep=true,onRef,value}:{rep?:boolean,onRef?:any,value:any})=>{
     const [repcomment,setRep]=useState<any>()
     const [showrep,setShowrep]=useState(false)
     const getHeight=(x1:any)=>{
@@ -168,6 +172,16 @@ const CommentItem=({rep=true,onRef,value}:{rep?:boolean,onRef?:any,value:any})=>
         
     }
     const [repinput,setRepinput]=useState(false)
+    const [img,setImg]=useState<string>()
+    useEffect(()=>{
+        
+        if(getUser())
+        getData2('user',(e:any)=>{
+         
+            setImg(e[0].imgURL||'')
+        },where(documentId(),'==',value?.id))
+
+    },[])
     return <div className={`CommentItem `}>
         {rep&&repcomment&&<div ref={(e)=>{
             if(e)
@@ -177,7 +191,7 @@ const CommentItem=({rep=true,onRef,value}:{rep?:boolean,onRef?:any,value:any})=>
         }}
             className='draw'></div>}
         <div className='commientItem-content'>
-        <Avatar></Avatar>
+        <Avatar img={img}></Avatar>
         <div className='comment-container'>
         <div className='CommentItem-content'>
         
@@ -217,9 +231,11 @@ const CommentItem=({rep=true,onRef,value}:{rep?:boolean,onRef?:any,value:any})=>
 const CommentInput=({value,setRep}:{value?:any,setRep?:any})=>{
     const {data}:any=useContext(CommentContext)
     const [text,setText]=useState<string>('')
-
+    const {user}:any=useContext(HomeContext)
+    
     return <div className={`CommentInput ${setRep&&'repcomment'}`}>
-       <Avatar></Avatar><div className='iput'><textarea ref={(e)=>{
+       <Avatar img={user?.imgURL}></Avatar><div className='iput'>{user?
+       <><textarea ref={(e)=>{
         if(setRep)
         setRep(e)
        }} value={text} onChange={(e:any)=>{
@@ -228,33 +244,39 @@ const CommentInput=({value,setRep}:{value?:any,setRep?:any})=>{
        e.target.style.height = "auto";
         e.target.style.height=e.target.scrollHeight+'px'
   
-       }} autoFocus></textarea>
-       <div className='inputfooter'>
-        <div className='inputfooter-button'><img onClick={()=>{
-            if(text=='')return
-            setText('')
-            let listcomment=data.comments||[]
-            console.log(data,value)
-            if(value){
-                value.comments=[...value.comments||[], {...getUser(),
-                    comment:text}]
-                    updateData('blog',data.id,{
-                        comments:[...data.comments]
-                    },()=>{},(e:any)=>{
-                            console.log(e)
-                    })
-            }
-            else
-            updateData('blog',data.id,{
-                comments:[...listcomment,{
-                    ...getUser(),
-                    idcmt:v4(),
-                    comment:text
-                }]
-            },()=>{},(e:any)=>{
-                    console.log(e)
-            })
-        }} src={icon.send.src}></img></div></div></div>
+       }} autoFocus></textarea><div className='inputfooter'>
+       <div className='inputfooter-button'><img onClick={()=>{
+           if(text=='')return
+           setText('')
+           let listcomment=data.comments||[]
+        
+           if(value){
+               value.comments=[...value.comments||[], {...getUser(),
+                   comment:text}]
+                   updateData('blog',data.id,{
+                       comments:[...data.comments]
+                   },()=>{},(e:any)=>{
+                           console.log(e)
+                   })
+           }
+           else
+           updateData('blog',data.id,{
+               comments:[...listcomment,{
+                   ...getUser(),
+                   idcmt:v4(),
+                   comment:text
+               }]
+           },()=>{},(e:any)=>{
+                   console.log(e)
+           })
+       }} src={icon.send.src}></img></div></div></>
+       :<div style={{
+        padding:10
+       }} ref={(e)=>{
+        if(setRep)
+        setRep(e)
+       }}>Bạn cần phải đăng nhập để bình luận!</div>}
+       </div>
     </div>
 }
 
@@ -273,12 +295,19 @@ const Comment=({data}:{
 }
 
 const Blog=({data}:any)=>{
-  
+    
+    const [img,setImg]=useState<any>()
+    useEffect(()=>{
+ getData2('user',(e:any)=>{
+         
+            setImg(e[0].imgURL||'')
+        },where('userid','==',data?.userid))
+    },[])
     const [cmt,setCmt]=useState<boolean>(false)
     return <div className='Blog'>
         <div className='Blog-head'>
             <div className='Blog-head-detail'>
-            <Avatar></Avatar>
+            <Avatar img={img}></Avatar>
             <div className='Blog-head-detail-button'>
                 <div className='name'>{data?.name||'Vô danh'}</div>
                 <div className='time'>{moment(data?.time).format('DD/MM/YYYY HH:mm')}</div>
@@ -327,11 +356,12 @@ const Blog=({data}:any)=>{
     </div>
 }
 export default function HomeContent({home}:{home:boolean}){
-    const [blogs,setBlogs]=useState([])
+    const [blogs,setBlogs]=useState<any>([])
+
     useEffect(()=>{
     getData('blog',(e:any)=>{
-       
-        setBlogs(e)
+       let arr:any=[...e].reverse()
+        setBlogs([...arr])
     })
 
     },[])

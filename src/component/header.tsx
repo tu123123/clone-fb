@@ -7,12 +7,18 @@ import Login from "./login/login"
 import Link from "next/link"
 import Cookies from "js-cookie"
 import { getUser } from "./home/content"
+import { getData2 } from "./firebase/config"
+import { documentId, where } from "firebase/firestore"
 
 export default  function Header(){
     const [login,setLogin]=useState(false)
     const [user,setUser]=useState({name:''})
     useEffect(()=>{
-        setUser(getUser()||{name:''})
+        if(getUser())
+            getData2('user',(e:any)=>{
+             
+                setUser(e[0])
+            },where(documentId(),'==',getUser()?.id))
     },[])
     if(user!=null)
     return <div className="header-component">
@@ -38,7 +44,7 @@ export default  function Header(){
             <><div className="user-button">          <img src={icon.mess.src}></img></div>
             <div className="user-button">          <img src={icon.bell.src}></img></div>
       
-            <div className="user-avatar">          <img src='https://fptshop.com.vn/uploads/originals/2023/11/14/638356007024019763_anime-ai-la-gi-bat-mi-cach-tao-anime-bang-ai-cuc-don-gian.png'></img></div>
+            <div className="user-avatar">          <img src={ user?.imgURL||'https://fptshop.com.vn/uploads/originals/2023/11/14/638356007024019763_anime-ai-la-gi-bat-mi-cach-tao-anime-bang-ai-cuc-don-gian.png'}></img></div>
             </>}
         
         </div>

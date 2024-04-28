@@ -27,7 +27,7 @@ export function ListContract(){
     }}>Không có dữ liệu</div>:users?.map((i:any)=>{
 
                 return <div key={i.id} className='UserItem'>
-                <Avatar></Avatar> <p>{i.name}</p>
+                <Avatar img={i.imgURL}></Avatar> <p>{i.name}</p>
                
             </div>
             })}

@@ -42,10 +42,11 @@ export default function MyUser(){
 
 const [user,setUser]=useState<any>()
 const getUserInfo=()=>{
+    if(getUser())
     getData2('user',(e:any)=>{
-        console.log(e)
+     
         setUser(e[0])
-    },where(documentId(),'==',getUser().id))
+    },where(documentId(),'==',getUser()?.id))
 }
 useEffect(()=>{
  
