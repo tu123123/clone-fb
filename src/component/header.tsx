@@ -34,7 +34,9 @@ export default  function Header(){
             menu.current.style.transform='translateX(-100vw)'
             }} src={icon.closewhite.src}></img></div>
         </div>
-       
+        <Link href={'/'}>
+            <div  className="bottion-icon">          <img src={icon.home.src}></img></div>
+            </Link>
             <div className="bottion-icon">          <img src={icon.group.src}></img>Group</div>
             <div className="bottion-icon">          <img src={icon.video.src}></img>Videos</div>
             <div className="bottion-icon">          <img src={icon.market.src}></img>MarketPlace</div>
