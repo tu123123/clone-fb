@@ -63,6 +63,7 @@ interface ModalCreateBlogType{
 const ModalCreateBlog=({onClose}:ModalCreateBlogType)=>{
     const [upimg,setUpimg]=useState<any>([])
     const {setLoading}=useContext(HomeContext)
+    const {setLoadinghome}=useContext(UserContext)
     const getSrcFromFile = (file:any) => {
         return new Promise((resolve) => {
           const reader = new FileReader();
@@ -76,10 +77,16 @@ const ModalCreateBlog=({onClose}:ModalCreateBlogType)=>{
       })
     return <Modal groupButton={
         <><Button onClick={async()=>{
+            if(setLoading)
             setLoading(true)
+        else 
+        setLoadinghome(true)
             const loopUpdate=(data=upimg,index=0)=>{
                 if(!data[index]) return addData('blog',{...status,time:moment().format('MM/DD/YYYY HH:mm')},()=>{
-                    setLoading(false)
+                    if(setLoading)
+                        setLoading(false)
+                    else 
+                    setLoadinghome(false)
                     onClose()
                         })  
                 let i=data[index]
@@ -186,7 +193,7 @@ const CommentItem= ({rep=true,onRef,value}:{rep?:boolean,onRef?:any,value:any})=
     const [img,setImg]=useState<string>()
     useEffect(()=>{
         
-        if(getUser())
+      
         getData2('user',(e:any)=>{
          
             setImg(e[0].imgURL||'')

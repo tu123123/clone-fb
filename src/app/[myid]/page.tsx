@@ -12,8 +12,11 @@ import HomeContent from '@/component/home/content';
 import firebase from 'firebase/compat/app';
 import { v4  } from 'uuid';
 import { useRouter, useSearchParams } from 'next/navigation';
+import Loading from '@/component/loading/loading';
 import { createContext } from 'react';
+import Cookies from 'js-cookie';
 export const UserContext:any=createContext({})
+
 const UploadImg=({children,onSave}:any)=>{
 
     const getSrcFromFile = (file:any) => {
@@ -58,9 +61,10 @@ useEffect(()=>{
     
     getUserInfo()
 },[])
+const [loading,setLoading]=useState<any>(false)
 if(user)
 return <div className='MyUser'>
-       
+       {loading&&<Loading></Loading>}
     <div className='mycontent'>
     <div style={{
             backgroundImage:`url("${user?.backgroundUrl}")`
@@ -113,8 +117,12 @@ return <div className='MyUser'>
                 <div className='button-detail'>Thêm tiểu sử</div>
                 <div className='button-detail'>Chỉnh sửa chi tiết</div>
                 <div className='button-detail'>Thêm nội dung đáng chú ý</div>
+                <div onClick={()=>{
+                    Cookies.remove('user')
+                    window.location.href='/'
+                }} className='button-detail'>Đăng xuất</div>
              </div>
-             <UserContext.Provider value={{userhome:user}}> <HomeContent params={{...params,myuser:{...user}}}></HomeContent></UserContext.Provider>
+             <UserContext.Provider value={{userhome:user,setLoadinghome:setLoading}}> <HomeContent params={{...params,myuser:{...user}}}></HomeContent></UserContext.Provider>
            
             
              </div>
