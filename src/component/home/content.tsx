@@ -13,7 +13,9 @@ import { Button, Upload } from 'antd';
 import { HomeContext } from '@/app/page'
 import moment from 'moment'
 import { documentId, where } from 'firebase/firestore'
+import addNotification from 'react-push-notification';
 const CommentContext= createContext<any>({})
+moment.locale('vi')
 const Card=()=>{
 
     return <div style={{
@@ -215,7 +217,7 @@ const CommentItem= ({rep=true,onRef,value}:{rep?:boolean,onRef?:any,value:any})=
             e.style.width=refele.current.offsetWidth+'px'
         }
 }} className='CommentItem-footer'>
-            <div className='CommentItem-footer-time'>1 ngày</div>
+            <div className='CommentItem-footer-time'>{value.time?moment(value.time).fromNow(true):'1 ngày'}</div>
             <div style={{
                 color:value.likes?.find((i:string)=>i===getUser()?.id)&&'#34d8ff'
             }} onClick={()=>{
@@ -281,6 +283,7 @@ const CommentInput=({value,setRep}:{value?:any,setRep?:any})=>{
         
            if(value){
                value.comments=[...value.comments||[], {...getUser(),
+                time:moment().format('MM/DD/YYYY HH:mm'),
                    comment:text}]
                    updateData('blog',data.id,{
                        comments:[...data.comments]
@@ -293,6 +296,7 @@ const CommentInput=({value,setRep}:{value?:any,setRep?:any})=>{
                comments:[...listcomment,{
                    ...getUser(),
                    idcmt:v4(),
+                   time:moment().format('MM/DD/YYYY HH:mm'),
                    comment:text
                }]
            },()=>{},(e:any)=>{
@@ -384,21 +388,35 @@ const Blog=({data}:any)=>{
             </div>}
     </div>
 }
-export default function HomeContent({home}:{home:boolean}){
+export default function HomeContent({params}:{params:{
+    myid:string,
+    myuser:any
+}}){
     const [blogs,setBlogs]=useState<any>([])
-
+    const {user}:any=useContext(HomeContext)
     useEffect(()=>{
     getData('blog',(e:any)=>{
        let arr:any=[...e].reverse()
+       addNotification({
+        title: 'Warning',
+            subtitle: 'Thông báo',
+            message: 'Đã có bài viết mới',
+            theme: 'darkblue',
+            native: true 
+       })
         setBlogs([...arr])
     })
 
     },[])
+    
     return <div className='HomeContent'>
-        {!home&&<ListCard></ListCard>}
-        <AddStatus></AddStatus>
+        {!params&&<ListCard></ListCard>}
+        {!params||params.myid==params.myuser?.id&&<AddStatus></AddStatus>}
     {
-        blogs?.map((i:any)=>{
+        blogs?.filter((i:any)=>{
+            if (!params) return true
+            return i.userid===params.myuser.userid
+        }).map((i:any)=>{
             return <Blog data={i} key={i.id}></Blog>
         })
     }

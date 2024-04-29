@@ -5,6 +5,7 @@ import { getData, getData2 } from '../firebase/config'
 import { useContext, useEffect, useState } from 'react'
 import { HomeContext } from '@/app/page'
 import { where } from 'firebase/firestore'
+import Link from 'next/link'
 export function ListContract(){
     let user=getUser()
     const [users,setUsers]=useState<any>()
@@ -26,10 +27,11 @@ export function ListContract(){
         color:'white'
     }}>Không có dữ liệu</div>:users?.map((i:any)=>{
 
-                return <div key={i.id} className={`UserItem ${i.online&&'online'}`}>
+            return <Link href={'/'+i.id} key={i.id}>
+            <div  className={`UserItem ${i.online&&'online'}`}>
                 <Avatar img={i.imgURL}></Avatar> <p>{i.name}</p>
                
-            </div>
+            </div></Link>
             })}
       
        

@@ -2,7 +2,7 @@
 import { Button, Upload } from 'antd';
 import './myuser.scss'
 import { icon } from '@/component/icon'
-import { ReactElement, ReactNode, useEffect, useState } from 'react'
+import { ReactElement, ReactNode, useEffect, useRef, useState } from 'react'
 import { getDownloadURL,ref,uploadBytes } from 'firebase/storage';
 import ImgCrop from 'antd-img-crop';
 import { getData2, imgDb, updateData } from '@/component/firebase/config';
@@ -11,6 +11,8 @@ import { getUser } from '@/component/home/content';
 import HomeContent from '@/component/home/content';
 import firebase from 'firebase/compat/app';
 import { v4  } from 'uuid';
+import { useRouter, useSearchParams } from 'next/navigation';
+
 const UploadImg=({children,onSave}:any)=>{
 
     const getSrcFromFile = (file:any) => {
@@ -38,7 +40,8 @@ const UploadImg=({children,onSave}:any)=>{
 </Upload>
 </ImgCrop>
 }
-export default function MyUser(){
+export default function MyUser({params}:{params:{myid:string}}){
+    const route=useSearchParams()
 
 const [user,setUser]=useState<any>()
 const getUserInfo=()=>{
@@ -46,20 +49,22 @@ const getUserInfo=()=>{
     getData2('user',(e:any)=>{
      
         setUser(e[0])
-    },where(documentId(),'==',getUser()?.id))
+    },where(documentId(),'==',params.myid))
 }
+const checkuser=useRef<any>()
 useEffect(()=>{
- 
+   checkuser.current=getUser()
+    
     getUserInfo()
 },[])
-
+if(user)
 return <div className='MyUser'>
         
     <div className='mycontent'>
     <div style={{
             backgroundImage:`url("${user?.backgroundUrl}")`
         }} className='MyUser-background'>
-           <div className='button'>
+           {checkuser.current?.id===params.myid&&<div className='button'>
             <UploadImg onSave={(e:any)=>{
                    let imgRef=ref(imgDb,'files/'+v4()+e.data.name,)
                    uploadBytes(imgRef,e.data).then(value=>{
@@ -73,13 +78,13 @@ return <div className='MyUser'>
                 Chỉnh sửa ảnh
           </UploadImg>
            
-           </div>
+           </div>}
         </div>
        <div className='user-info'>
        <div  style={{
             backgroundImage:`url("${user?.imgURL}")`
         }} className='MyUser-avatar'>
-           <div  className='edit'>
+           {checkuser.current?.id===params.myid&&<div  className='edit'>
            <UploadImg onSave={(e:any)=>{
                     let imgRef=ref(imgDb,'files/'+e.data.name)
                     uploadBytes(imgRef,e.data).then(value=>{
@@ -93,7 +98,7 @@ return <div className='MyUser'>
                  <img src={icon.camera.src}></img>
            </UploadImg>
             
-           </div>
+           </div>}
         </div>
         <div className='user-name'>
         {user?.name}
@@ -108,7 +113,7 @@ return <div className='MyUser'>
                 <div className='button-detail'>Chỉnh sửa chi tiết</div>
                 <div className='button-detail'>Thêm nội dung đáng chú ý</div>
              </div>
-             <HomeContent home></HomeContent>
+             <HomeContent params={{...params,myuser:{...user}}}></HomeContent>
              </div>
     </div>
    
