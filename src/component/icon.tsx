@@ -7,6 +7,7 @@ import mess from './assets/mess.svg';
 import people from './assets/people.svg';
 import video from './assets/video.svg';
 import next from './assets/next.svg'
+import menu from './assets/menu.svg'
 import like from './assets/like.svg'
 import comment from './assets/comment.svg'
 import likeWhite from './assets/likeWhite.svg'
@@ -14,13 +15,16 @@ import share from './assets/share.svg'
 import peoplecolor from './assets/peoplecolor.svg'
 import marketcolor from './assets/marketcolor.svg'
 import loading from './assets/loading.svg'
+import closewhite from './assets/closewhite.svg'
 import close from './assets/close.svg'
 import send from './assets/send.svg'
 import camera from './assets/camera.svg'
 export const icon ={
     bell:bell,
+    menu:menu,
     camera:camera,
     group:group,
+    closewhite:closewhite,
     home:home,
     loading:loading,
     close:close,

@@ -1,4 +1,54 @@
 .header-component{
+    .menu2{
+       
+        transition: 0.3s;
+        display: none;
+        gap: 0px;
+        grid-template-columns: 1fr 1fr;
+        .menu-option-header{
+            padding: 10px;
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 1px solid gray;
+            .logo-close{
+                img{
+                    cursor: pointer;
+                    border-radius: 50%;
+                    &:hover{
+                        background: gray;
+                    }
+                    min-height: 40px;
+                    min-width: 40px !important;
+                    max-width: 40px !important;
+                }
+            }
+        }
+        .logo-img{
+            height: 40px;
+            width: 40px;
+        }
+        .menu-close{
+            background: rgba(24, 22, 22, 0.356);
+        }
+        .menu-option{
+            .bottion-icon{
+                border-radius: 0px;
+                justify-content: start;
+                display: flex !important;
+            }
+            background: rgb(7, 7, 7);
+            display: grid;
+        grid-auto-rows: max-content;
+        }
+        overflow: auto;
+        position: fixed;
+        z-index: 10;
+        height: 100vh;
+      
+        top: 0;
+        left: 0;
+        width: 100vw;
+    }
     background: rgb(57, 57, 57);
     display: grid;
     padding: 0px 20px;
@@ -6,6 +56,12 @@
     align-items: center;
     grid-template-columns: max-content 1fr max-content;
     .bottion-icon{
+        @media screen and (max-width:600px) {
+            &{
+                display: none;
+            }
+       
+        }
         display: flex;
         color: white;
         align-items: center;
@@ -20,6 +76,24 @@
             background: rgb(93, 92, 92);
         }
         padding: 5px 30px;
+    }
+    .menu{
+        display: none;
+    }
+    @media screen and (max-width:700px) {
+        .menu2{
+            display: grid;
+        }
+        .button-header{
+            justify-content: start;
+        }
+       .bottion-icon {
+            display: none;
+        }
+        .menu{
+            display: flex;
+        }
+   
     }
     .user-icon{
         gap:10px
