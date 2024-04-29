@@ -7,7 +7,7 @@ import Login from "./login/login"
 import Link from "next/link"
 import Cookies from "js-cookie"
 import { getUser } from "./home/content"
-import { getData2 } from "./firebase/config"
+import { getData2, updateData } from "./firebase/config"
 import { documentId, where } from "firebase/firestore"
 
 export default  function Header(){
@@ -16,10 +16,18 @@ export default  function Header(){
     const [user,setUser]=useState<any>({name:''})
     useEffect(()=>{
         if(getUser())
-            getData2('user',(e:any)=>{
-             
-                setUser(e[0])
-            },where(documentId(),'==',getUser()?.id))
+           { updateData('user',getUser().id,{online:true},()=>{
+                getData2('user',(e:any)=>{
+                
+                    setUser(e[0])
+                },where(documentId(),'==',getUser()?.id))
+            },()=>{})
+            window.addEventListener("beforeunload", (ev) => 
+                {  
+                    updateData('user',getUser().id,{online:false},()=>{
+                       
+                    },()=>{})
+                });}
     },[])
     if(user!=null)
     return <div className="header-component">
@@ -68,7 +76,7 @@ export default  function Header(){
             <><div className="user-button">          <img src={icon.mess.src}></img></div>
             <div className="user-button">          <img src={icon.bell.src}></img></div>
       
-            <div className="user-avatar">          <img src={ user?.imgURL||'https://fptshop.com.vn/uploads/originals/2023/11/14/638356007024019763_anime-ai-la-gi-bat-mi-cach-tao-anime-bang-ai-cuc-don-gian.png'}></img></div>
+            <div className="user-avatar">     <Link href={'/'+user.id}> <img src={ user?.imgURL||'https://fptshop.com.vn/uploads/originals/2023/11/14/638356007024019763_anime-ai-la-gi-bat-mi-cach-tao-anime-bang-ai-cuc-don-gian.png'}></img></Link>    </div>
             </>}
         
         </div>

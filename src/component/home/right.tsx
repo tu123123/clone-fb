@@ -1,7 +1,7 @@
 'use client'
 import './home.scss'
 import { Avatar, getUser } from './content'
-import { getData2 } from '../firebase/config'
+import { getData, getData2 } from '../firebase/config'
 import { useContext, useEffect, useState } from 'react'
 import { HomeContext } from '@/app/page'
 import { where } from 'firebase/firestore'
@@ -10,9 +10,9 @@ export function ListContract(){
     const [users,setUsers]=useState<any>()
     useEffect(()=>{
         if(user)
-        getData2('user',(e:any)=>{
+        getData('user',(e:any)=>{
             setUsers(e||[])
-        },()=>{})
+        })
 
     },[])
 
@@ -26,16 +26,13 @@ export function ListContract(){
         color:'white'
     }}>Không có dữ liệu</div>:users?.map((i:any)=>{
 
-                return <div key={i.id} className='UserItem'>
+                return <div key={i.id} className={`UserItem ${i.online&&'online'}`}>
                 <Avatar img={i.imgURL}></Avatar> <p>{i.name}</p>
                
             </div>
             })}
       
-        <div className='UserItem online'>
-            <Avatar></Avatar> <p>te</p>
-           
-        </div>
+       
     
         
         </div>
