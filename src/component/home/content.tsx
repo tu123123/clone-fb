@@ -281,9 +281,48 @@ const CommentInput=({value,setRep}:{value?:any,setRep?:any})=>{
     const [text,setText]=useState<string>('')
     const {user}:any=useContext(HomeContext)
     const {userhome}:any=useContext(UserContext)
+    const enter=()=>{
+        if(text.trim()=='')return
+        setText('')
+        let listcomment=data.comments||[]
+     
+        if(value){
+            value.comments=[...value.comments||[], {...getUser(),
+             time:moment().format('MM/DD/YYYY HH:mm'),
+                comment:text}]
+                updateData('blog',data.id,{
+                    comments:[...data.comments]
+                },()=>{
+                 addNotifications({
+                     thongbao:text,title:(user.name||userhome.name)+ ' đã gửi tin nhắn mới',userid:user.name||userhome.name
+                 })
+                },(e:any)=>{
+                        console.log(e)
+                })
+                
+        }
+        else
+        updateData('blog',data.id,{
+            comments:[...listcomment,{
+                ...getUser(),
+                idcmt:v4(),
+                time:moment().format('MM/DD/YYYY HH:mm'),
+                comment:text
+            }]
+        },()=>{ addNotifications({
+         thongbao:text,title:(user.name||userhome.name)+ ' đã gửi tin nhắn mới',userid:user.name||userhome.name
+     })},(e:any)=>{
+                console.log(e)
+        })
+    }
     return <div className={`CommentInput ${setRep&&'repcomment'}`}>
        <Avatar img={user?.imgURL||userhome?.imgURL}></Avatar><div className='iput'>{user||userhome?
-       <><textarea ref={(e)=>{
+       <><textarea onKeyDown={(e)=>{
+        if(e.key=='Enter'&&e.shiftKey) return
+        if(e.key=='Enter'){
+            enter()
+        }
+       }} ref={(e)=>{
         if(setRep)
         setRep(e)
        }} value={text} onChange={(e:any)=>{
@@ -293,39 +332,8 @@ const CommentInput=({value,setRep}:{value?:any,setRep?:any})=>{
         e.target.style.height=e.target.scrollHeight+'px'
   
        }} autoFocus></textarea><div className='inputfooter'>
-       <div className='inputfooter-button'><img onClick={()=>{
-           if(text=='')return
-           setText('')
-           let listcomment=data.comments||[]
-        
-           if(value){
-               value.comments=[...value.comments||[], {...getUser(),
-                time:moment().format('MM/DD/YYYY HH:mm'),
-                   comment:text}]
-                   updateData('blog',data.id,{
-                       comments:[...data.comments]
-                   },()=>{
-                    addNotifications({
-                        thongbao:text,title:(user.name||userhome.name)+ ' đã gửi tin nhắn mới',userid:user.name||userhome.name
-                    })
-                   },(e:any)=>{
-                           console.log(e)
-                   })
-                   
-           }
-           else
-           updateData('blog',data.id,{
-               comments:[...listcomment,{
-                   ...getUser(),
-                   idcmt:v4(),
-                   time:moment().format('MM/DD/YYYY HH:mm'),
-                   comment:text
-               }]
-           },()=>{ addNotifications({
-            thongbao:text,title:(user.name||userhome.name)+ ' đã gửi tin nhắn mới',userid:user.name||userhome.name
-        })},(e:any)=>{
-                   console.log(e)
-           })
+       <div className='inputfooter-button'><img onClick={()=>{enter()
+          
        }} src={icon.send.src}></img></div></div></>
        :<div style={{
         padding:10
