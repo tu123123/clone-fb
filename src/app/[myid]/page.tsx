@@ -45,13 +45,14 @@ const UploadImg=({children,onSave}:any)=>{
 </ImgCrop>
 }
 export default function MyUser({params}:{params:{myid:string}}){
-    const route=useSearchParams()
+   const myuser=useRef<any>()
 
 const [user,setUser]=useState<any>()
 const getUserInfo=()=>{
+myuser.current=getUser()
     if(getUser())
     getData2('user',(e:any)=>{
-     
+        
         setUser(e[0])
     },where(documentId(),'==',params.myid))
 }
@@ -122,7 +123,7 @@ return <div className='MyUser'>
                     window.location.href='/'
                 }} className='button-detail'>Đăng xuất</div>
              </div>
-             <UserContext.Provider value={{userhome:user,setLoadinghome:setLoading}}> <HomeContent params={{...params,myuser:{...user}}}></HomeContent></UserContext.Provider>
+             <UserContext.Provider value={{userhome:user,setLoadinghome:setLoading}}> <HomeContent params={{...params,myuser:{...myuser.current}}}></HomeContent></UserContext.Provider>
            
             
              </div>
