@@ -12,7 +12,8 @@ import HomeContent from '@/component/home/content';
 import firebase from 'firebase/compat/app';
 import { v4  } from 'uuid';
 import { useRouter, useSearchParams } from 'next/navigation';
-
+import { createContext } from 'react';
+export const UserContext:any=createContext({})
 const UploadImg=({children,onSave}:any)=>{
 
     const getSrcFromFile = (file:any) => {
@@ -59,7 +60,7 @@ useEffect(()=>{
 },[])
 if(user)
 return <div className='MyUser'>
-        
+       
     <div className='mycontent'>
     <div style={{
             backgroundImage:`url("${user?.backgroundUrl}")`
@@ -113,7 +114,9 @@ return <div className='MyUser'>
                 <div className='button-detail'>Chỉnh sửa chi tiết</div>
                 <div className='button-detail'>Thêm nội dung đáng chú ý</div>
              </div>
-             <HomeContent params={{...params,myuser:{...user}}}></HomeContent>
+             <UserContext.Provider value={{userhome:user}}> <HomeContent params={{...params,myuser:{...user}}}></HomeContent></UserContext.Provider>
+           
+            
              </div>
     </div>
    

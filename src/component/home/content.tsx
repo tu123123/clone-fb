@@ -1,5 +1,5 @@
 "use client"
-import { ReactNode, useContext, useEffect, useState, createContext, useRef,} from 'react'
+import { ReactNode, useContext, useEffect, useState, createContext, useRef, use,} from 'react'
 import { icon } from '../icon'
 import './home.scss'
 import Cookies from 'js-cookie'
@@ -14,6 +14,8 @@ import { HomeContext } from '@/app/page'
 import moment from 'moment'
 import { documentId, where } from 'firebase/firestore'
 import addNotification from 'react-push-notification';
+import { title } from 'process'
+import { UserContext } from '@/app/[myid]/page'
 const CommentContext= createContext<any>({})
 moment.locale('vi')
 const Card=()=>{
@@ -138,13 +140,18 @@ const ModalCreateBlog=({onClose}:ModalCreateBlogType)=>{
 
     </Modal>
 }
+
 const AddStatus=()=>{
     const [open,setOpen]=useState(false)
     const {user}:any=useContext(HomeContext)
+    const {userhome}:any=useContext(UserContext)
+    useEffect(()=>{
+
+    },[])
     return <div className='AddStatus'>
         {open&&<ModalCreateBlog onClose={()=>setOpen(false)}></ModalCreateBlog>}
-        <Avatar img={user?.imgURL}></Avatar>
-        <div onClick={()=>user&&setOpen(true)} className='AddStatus-button'>{user?'Bạn đang nghĩ gì thế?':'Bạn cần đăng nhập để đăng bài'}</div>
+        <Avatar img={user?.imgURL||userhome?.imgURL}></Avatar>
+        <div onClick={()=>(user||userhome)&&setOpen(true)} className='AddStatus-button'>{user||userhome?'Bạn đang nghĩ gì thế?':'Bạn cần đăng nhập để đăng bài'}</div>
     </div>
 }
 const countCmt=(data:any,count=0)=>{
@@ -259,13 +266,16 @@ const CommentItem= ({rep=true,onRef,value}:{rep?:boolean,onRef?:any,value:any})=
     
     </div>
 }
+const addNotifications=(notifi:any)=>{
+    updateData('realtime','CGz3WFV4WK4cKndhHFSX',{...notifi,time:moment().format('DD/MM/YYYY HH:mm')},()=>{},()=>{})
+}
 const CommentInput=({value,setRep}:{value?:any,setRep?:any})=>{
     const {data}:any=useContext(CommentContext)
     const [text,setText]=useState<string>('')
     const {user}:any=useContext(HomeContext)
-    
+    const {userhome}:any=useContext(UserContext)
     return <div className={`CommentInput ${setRep&&'repcomment'}`}>
-       <Avatar img={user?.imgURL}></Avatar><div className='iput'>{user?
+       <Avatar img={user?.imgURL||userhome?.imgURL}></Avatar><div className='iput'>{user||userhome?
        <><textarea ref={(e)=>{
         if(setRep)
         setRep(e)
@@ -287,9 +297,14 @@ const CommentInput=({value,setRep}:{value?:any,setRep?:any})=>{
                    comment:text}]
                    updateData('blog',data.id,{
                        comments:[...data.comments]
-                   },()=>{},(e:any)=>{
+                   },()=>{
+                    addNotifications({
+                        thongbao:text,title:user.name||userhome.name+ 'đã gửi tin nhắn mới',userid:user.name||userhome.name
+                    })
+                   },(e:any)=>{
                            console.log(e)
                    })
+                   
            }
            else
            updateData('blog',data.id,{
@@ -299,7 +314,9 @@ const CommentInput=({value,setRep}:{value?:any,setRep?:any})=>{
                    time:moment().format('MM/DD/YYYY HH:mm'),
                    comment:text
                }]
-           },()=>{},(e:any)=>{
+           },()=>{ addNotifications({
+            thongbao:text,title:user.name||userhome.name+ 'đã gửi tin nhắn mới',userid:user.name||userhome.name
+        })},(e:any)=>{
                    console.log(e)
            })
        }} src={icon.send.src}></img></div></div></>
@@ -395,23 +412,29 @@ export default function HomeContent({params}:{params:{
     const [blogs,setBlogs]=useState<any>([])
     const {user}:any=useContext(HomeContext)
     useEffect(()=>{
+   
     getData('blog',(e:any)=>{
        let arr:any=[...e].reverse()
-       addNotification({
-        title: 'Warning',
-            subtitle: 'Thông báo',
-            message: 'Đã có bài viết mới',
-            theme: 'darkblue',
-            native: true 
-       })
+     
         setBlogs([...arr])
     })
-
+    getData('realtime',(e:any)=>{
+       
+        if(e[0]?.thongbao)
+            {addNotification({
+                title: e[0].title,
+                    subtitle: e[0].userid,
+                    message: e[0].thongbao,
+                    theme: 'darkblue',
+                    native: true 
+               })
+            addNotifications({thongbao:'',title:'',userid:''})}
+    })
     },[])
     
     return <div className='HomeContent'>
         {!params&&<ListCard></ListCard>}
-        {!params||params.myid==params.myuser?.id&&<AddStatus></AddStatus>}
+        {(!params||params&&params.myid==params.myuser?.id)&&<AddStatus></AddStatus>}
     {
         blogs?.filter((i:any)=>{
             if (!params) return true
