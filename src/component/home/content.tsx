@@ -299,7 +299,7 @@ const CommentInput=({value,setRep}:{value?:any,setRep?:any})=>{
                        comments:[...data.comments]
                    },()=>{
                     addNotifications({
-                        thongbao:text,title:user.name||userhome.name+ 'đã gửi tin nhắn mới',userid:user.name||userhome.name
+                        thongbao:text,title:(user.name||userhome.name)+ 'đã gửi tin nhắn mới',userid:user.name||userhome.name
                     })
                    },(e:any)=>{
                            console.log(e)
@@ -315,7 +315,7 @@ const CommentInput=({value,setRep}:{value?:any,setRep?:any})=>{
                    comment:text
                }]
            },()=>{ addNotifications({
-            thongbao:text,title:user.name||userhome.name+ 'đã gửi tin nhắn mới',userid:user.name||userhome.name
+            thongbao:text,title:(user.name||userhome.name)+ 'đã gửi tin nhắn mới',userid:user.name||userhome.name
         })},(e:any)=>{
                    console.log(e)
            })
