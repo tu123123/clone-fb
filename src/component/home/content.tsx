@@ -1,5 +1,5 @@
 "use client"
-import { ReactNode, useContext, useEffect, useState, createContext,} from 'react'
+import { ReactNode, useContext, useEffect, useState, createContext, useRef,} from 'react'
 import { icon } from '../icon'
 import './home.scss'
 import Cookies from 'js-cookie'
@@ -164,6 +164,7 @@ const countCmt=(data:any,count=0)=>{
 const CommentItem= ({rep=true,onRef,value}:{rep?:boolean,onRef?:any,value:any})=>{
     const [repcomment,setRep]=useState<any>()
     const [showrep,setShowrep]=useState(false)
+    const {data}:any=useContext(CommentContext)
     const getHeight=(x1:any)=>{
         if(!x1) return 0
         let x=x1.getBoundingClientRect();
@@ -171,6 +172,7 @@ const CommentItem= ({rep=true,onRef,value}:{rep?:boolean,onRef?:any,value:any})=
         return x2.y-x.y+19
         
     }
+    const refele=useRef<any>()
     const [repinput,setRepinput]=useState(false)
     const [img,setImg]=useState<string>()
     useEffect(()=>{
@@ -196,6 +198,7 @@ const CommentItem= ({rep=true,onRef,value}:{rep?:boolean,onRef?:any,value:any})=
         <div className='CommentItem-content'>
         
         <p  ref={(e)=>{
+            refele.current=e
                 if(onRef){
                
                     onRef(e)
@@ -206,10 +209,36 @@ const CommentItem= ({rep=true,onRef,value}:{rep?:boolean,onRef?:any,value:any})=
         {value.comment}
 
         </p>
-<div className='CommentItem-footer'>
+<div ref={(e:any)=>{
+    if(e)
+        {
+            e.style.width=refele.current.offsetWidth+'px'
+        }
+}} className='CommentItem-footer'>
             <div className='CommentItem-footer-time'>1 ngày</div>
-            <div className='CommentItem-footer-button'>Thích</div>
+            <div style={{
+                color:value.likes?.find((i:string)=>i===getUser()?.id)&&'#34d8ff'
+            }} onClick={()=>{
+                let listlike=[...value.likes||[]]
+                let user=getUser();
+             
+                if(listlike.find((i:string)=>i==user.id))
+                    {
+                        listlike=   listlike.filter((i:string)=>i!=user.id)
+                    }
+                else listlike.push(user.id)
+                value.likes=[...listlike]
+                    updateData('blog',data.id,{
+                        comments:[...data.comments]
+                    },()=>{
+    
+                    },(e:any)=>{console.log(e)})
+                  
+            }}  className='CommentItem-footer-button'>Thích</div>
             <div onClick={()=>setRepinput(!repinput)} className='CommentItem-footer-button'>Phản hồi</div>
+            {
+                value.likes?.length>0&&<div className='CommentItem-like'><img src={icon.like.src}></img></div>
+            }
         
         </div>
         
