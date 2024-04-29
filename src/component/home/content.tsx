@@ -281,7 +281,8 @@ const CommentInput=({value,setRep}:{value?:any,setRep?:any})=>{
     const [text,setText]=useState<string>('')
     const {user}:any=useContext(HomeContext)
     const {userhome}:any=useContext(UserContext)
-    const enter=()=>{
+    const enter=(e:any)=>{
+        if(e) e.preventDefault()
         if(text.trim()=='')return
         setText('')
         let listcomment=data.comments||[]
@@ -317,10 +318,11 @@ const CommentInput=({value,setRep}:{value?:any,setRep?:any})=>{
     }
     return <div className={`CommentInput ${setRep&&'repcomment'}`}>
        <Avatar img={user?.imgURL||userhome?.imgURL}></Avatar><div className='iput'>{user||userhome?
-       <><textarea onKeyDown={(e)=>{
+       <><textarea onKeyPress={(e:any)=>{
         if(e.key=='Enter'&&e.shiftKey) return
+        
         if(e.key=='Enter'){
-            enter()
+            enter(e)
         }
        }} ref={(e)=>{
         if(setRep)
