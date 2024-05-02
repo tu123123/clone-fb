@@ -16,6 +16,7 @@ import { documentId, where } from 'firebase/firestore'
 import addNotification from 'react-push-notification';
 import { title } from 'process'
 import { UserContext } from '@/app/[myid]/page'
+import Link from 'next/link'
 const CommentContext= createContext<any>({})
 moment.locale('vi')
 const Card=()=>{
@@ -224,7 +225,7 @@ const CommentItem= ({rep=true,onRef,value}:{rep?:boolean,onRef?:any,value:any})=
                         let strArr=value.comment.split(' ')
                         let indx=strArr.findIndex((i:any)=>i.includes('https:'))
                         strArr[indx]=`<a href='${strArr[indx]}'>${strArr[indx]}</a>`
-                        e.innerHTML=strArr.join(' ')
+                        e.innerHTML=`${value.name}<br>`+strArr.join(' ')
                     }
         
         }} >{value.name}<br></br>
@@ -283,12 +284,12 @@ const CommentItem= ({rep=true,onRef,value}:{rep?:boolean,onRef?:any,value:any})=
 const addNotifications=(notifi:any)=>{
     updateData('realtime','CGz3WFV4WK4cKndhHFSX',{...notifi,time:moment().format('DD/MM/YYYY HH:mm')},()=>{},()=>{})
 }
-const CommentInput=({value,setRep}:{value?:any,setRep?:any})=>{
+export const CommentInput=({value,setRep}:{value?:any,setRep?:any})=>{
     const {data}:any=useContext(CommentContext)
     const [text,setText]=useState<string>('')
     const {user}:any=useContext(HomeContext)
     const {userhome}:any=useContext(UserContext)
-    const enter=(e:any)=>{
+    const enter=(e?:any)=>{
         if(e) e.preventDefault()
         if(text.trim()=='')return
         setText('')
@@ -407,7 +408,7 @@ const Blog=({data}:any)=>{
         </div>
         <div className='Blog-footer'>
             <div className='Blog-footer-left'>
-                <img src={icon.like.src}></img> <div>{data.likes?.length|0}</div>
+                <img src={icon.like.src}></img> <div>{data.likes?.length|0} </div>
             </div>
             <div onClick={()=>setCmt(true)} className='Blog-footer-right'>{countCmt(data)} Bình luận</div>
         </div>
@@ -437,7 +438,7 @@ const Blog=({data}:any)=>{
             </div>}
     </div>
 }
-export default function HomeContent({params}:{params:{
+export default function HomeContent({params}:{params?:{
     myid:string,
     myuser:any
 }}){

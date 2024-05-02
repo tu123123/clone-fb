@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { getFirestore,query,orderBy, } from "@firebase/firestore"
+import { getFirestore,query,orderBy, and} from "@firebase/firestore"
 import { collection, onSnapshot,addDoc,getDocs, doc, updateDoc,deleteDoc ,where } from "firebase/firestore";
 import { getStorage, ref, uploadBytes, } from "firebase/storage";
 import moment from "moment";
@@ -18,7 +18,7 @@ const app = initializeApp(firebaseConfig);
 const firestore = getFirestore(app)
 export const imgDb=getStorage(app)
 
-const getData2 =async (db:any,action:any,sql:any) => {
+const getData2 =async (db:any,action:any,sql?:any) => {
  
   getDocs(query(collection(firestore, db),sql||null)).then((querySnapshot)=>{     
         
@@ -30,9 +30,9 @@ const getData2 =async (db:any,action:any,sql:any) => {
      
 
 }
-const getData =async (db:any,action:any) => {
+const getData =async (db:any,action:any,sql?:any) => {
 
-   onSnapshot(query(collection(firestore, db),orderBy('time','asc')),(querySnapshot:any)=>{               
+   onSnapshot(query(collection(firestore, db),sql||where('time','!=',''),orderBy('time','asc')),(querySnapshot:any)=>{               
     action(querySnapshot.docs
      .map((doc:any) => ({...doc.data(), id:doc.id })).filter((i:any)=>!i.delete ))
                   

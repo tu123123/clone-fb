@@ -1,0 +1,101 @@
+.ListMess{
+    position: fixed;
+    bottom: 0;
+    right: 30px;
+    display: flex;
+    gap: 10px;
+    .userchat{
+        flex-direction: row-reverse;
+
+    }
+    .MessItem-content-time{
+        font-size: 12px;
+        color: rgb(155, 155, 155);
+    }
+    .MessInput{
+        display: flex;
+        gap:10px;
+        padding: 10px;
+        textarea{
+            flex: 1;
+            height: fit-content;
+            background: rgb(94, 94, 94);
+            resize: none;
+            border-radius: 10px;
+            color: white;
+            border: none;
+            outline: none;
+            padding: 5px;
+        }
+    }
+    .Messenger{
+        height: 450px;
+        width: 300px;
+        min-width: 300px;
+        background: rgb(59, 59, 59);
+        border-radius: 10px 10px 0 0;
+        overflow: hidden;
+        display: grid;
+        grid-template-columns: 1fr;
+        overflow: auto;
+        grid-template-rows: max-content 1fr max-content;
+
+        .Messenger-button{
+            img{
+                cursor: pointer;
+            }
+        }
+        .Messenger-content{ 
+            scroll-behavior: smooth;
+            display: grid;
+            grid-auto-rows: max-content;
+            overflow: auto;
+        }
+        .MessItem{
+            overflow: auto;
+            width: 100%;
+            padding: 10px;
+            display: flex;
+        
+            .avatar{
+                min-width: 30px;
+                max-width: 30px;
+                height: 30px;
+            }
+            color: white;
+            p{
+                background: gray;
+                word-break: normal;
+                width: 100%;
+                white-space: pre-line;
+                overflow-wrap: break-word;
+                display: inline-block;
+                padding: 5px;
+                border-radius: 5px;
+            }
+            gap: 10px;
+            .MessItem-content{
+             overflow: auto;
+             
+            }
+        }
+        .Messenger-header{
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            padding: 5px;
+            font-size: 15px;
+            .avatar{
+                min-width: 30px;
+                max-width: 30px;
+                height: 30px;
+            }
+            color: white;
+            background: rgb(69, 69, 69);
+            p{
+                flex: 1;
+               
+            }
+        }
+    }
+}
