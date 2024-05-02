@@ -17,7 +17,7 @@ export default function LeftContent(){
         },where(documentId(),'==',getUser()?.id))
     },[])
     return <div className='LeftContent'>
-        {user&&<Link href={'/'+user?.name}> <div className='LeftContent-item user'>
+        {user&&<Link href={'/'+user?.id}> <div className='LeftContent-item user'>
             <Avatar img={user.imgURL}></Avatar> <p>{user?.name}</p>
         </div></Link>}
        

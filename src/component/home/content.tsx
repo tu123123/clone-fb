@@ -213,12 +213,19 @@ const CommentItem= ({rep=true,onRef,value}:{rep?:boolean,onRef?:any,value:any})=
         <div className='comment-container'>
         <div className='CommentItem-content'>
         
-        <p  ref={(e)=>{
+        <p ref={(e)=>{
             refele.current=e
                 if(onRef){
                
                     onRef(e)
                 }
+                if(e&&value.comment.includes('https:'))
+                    {
+                        let strArr=value.comment.split(' ')
+                        let indx=strArr.findIndex((i:any)=>i.includes('https:'))
+                        strArr[indx]=`<a href='${strArr[indx]}'>${strArr[indx]}</a>`
+                        e.innerHTML=strArr.join(' ')
+                    }
         
         }} >{value.name}<br></br>
       
@@ -382,7 +389,15 @@ const Blog=({data}:any)=>{
             </div>
         </div>
         <div className='Blog-content'>
-            <p className='blog-content-body'>{data?.content}</p>
+            <p ref={(e:any)=>{
+                 if(e&&data?.content.includes('https:'))
+                    {
+                        let strArr=data?.content.split(' ')
+                        let indx=strArr.findIndex((i:any)=>i.includes('https:'))
+                        strArr[indx]=`<a href='${strArr[indx]}'>${strArr[indx]}</a>`
+                        e.innerHTML=strArr.join(' ')
+                    }
+            }} className='blog-content-body'>{data?.content}</p>
            <div className='listimg'>
            {data?.img?.map((i:any)=>{
                 return  <img key={i}src={i}></img>
