@@ -318,7 +318,7 @@ const CommentInput=({value,setRep}:{value?:any,setRep?:any})=>{
     }
     return <div className={`CommentInput ${setRep&&'repcomment'}`}>
        <Avatar img={user?.imgURL||userhome?.imgURL}></Avatar><div className='iput'>{user||userhome?
-       <><textarea onKeyPress={(e:any)=>{
+       <><textarea placeholder='Hãy nêu cảm nghĩ của bạn...' onKeyPress={(e:any)=>{
         if(e.key=='Enter'&&e.shiftKey) return
         
         if(e.key=='Enter'){
