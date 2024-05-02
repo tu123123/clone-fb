@@ -382,7 +382,7 @@ const Blog=({data}:any)=>{
             </div>
         </div>
         <div className='Blog-content'>
-            <div className='blog-content-body'>{data?.content}</div>
+            <p className='blog-content-body'>{data?.content}</p>
            <div className='listimg'>
            {data?.img?.map((i:any)=>{
                 return  <img key={i}src={i}></img>
