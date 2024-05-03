@@ -220,10 +220,10 @@ const CommentItem= ({rep=true,onRef,value}:{rep?:boolean,onRef?:any,value:any})=
                
                     onRef(e)
                 }
-                if(e&&value.comment.includes('https:'))
+                if(e&&value.comment.includes('http'))
                     {
                         let strArr=value.comment.split(' ')
-                        let indx=strArr.findIndex((i:any)=>i.includes('https:'))
+                        let indx=strArr.findIndex((i:any)=>i.includes('http')||i.includes('.'))
                         strArr[indx]=`<a href='${strArr[indx]}'>${strArr[indx]}</a>`
                         e.innerHTML=`${value.name}<br>`+strArr.join(' ')
                     }
@@ -462,7 +462,7 @@ export default function HomeContent({params}:{params?:{
                     native: true 
                })
             addNotifications({thongbao:'',title:'',userid:''})}
-    })
+    },where(documentId(),'==','CGz3WFV4WK4cKndhHFSX'))
     },[])
     
     return <div className='HomeContent'>

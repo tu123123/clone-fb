@@ -5,7 +5,7 @@ import './messenger.scss'
 import { icon } from '../icon'
 import { ReactNode, memo, useContext, useEffect, useRef, useState } from 'react'
 import { addData, getData, getData2, updateData } from '../firebase/config'
-import { and, where } from 'firebase/firestore'
+import { and, documentId, where } from 'firebase/firestore'
 import { HomeContext } from '@/app/page'
 import moment from 'moment'
 import { v4 } from 'uuid'
@@ -54,6 +54,7 @@ const MessInput=({data,value}:{data:any,value:any})=>{
                         time:moment().format('DD/MM/YYYY HH:mm')
                     },()=>{})
                 }
+                updateData('realtime','08ORLO3C2HSF4aCTZwcf',{user:{...value},userSend:{...user},time:moment().format('DD/MM/YYYY HH:mm')},()=>{},()=>{})
             },where('userid','==',value.id))
         },()=>{})
     }
@@ -79,6 +80,7 @@ const MessInput=({data,value}:{data:any,value:any})=>{
     const [loading,setLoading]=useState(true)
     const count=useRef(1)
     const getDataChat=()=>{
+        if(user)
         getData('messenger',((e:any)=>{
             setLoading(false)
             if(e[0])
@@ -91,7 +93,7 @@ const MessInput=({data,value}:{data:any,value:any})=>{
            }
     
     useEffect(()=>{
-        if(count.current==1)
+        if(count.current==1&&user)
        {
         
                 getData2('messenger',((e:any)=>{
@@ -149,7 +151,23 @@ export {Messenger}
  function ListMess({children}:{
     children?:any
 }){
-  
+    const {setListChat,user}=useContext(HomeContext)
+    useEffect(()=>{
+        if(user)
+        getData('realtime',(e:any)=>{
+           
+            if(e[0]?.user.id==user.id)
+               {
+                setListChat((pre:any)=>{
+                    if(pre.find(((a:{id:string})=>a.id==e[0]?.userSend.id))) return pre
+                    return [...pre,{
+                        ...e[0]?.userSend
+                    }]
+                })
+                updateData('realtime','08ORLO3C2HSF4aCTZwcf',{user:{},userSend:{},time:moment().format('DD/MM/YYYY HH:mm')},()=>{},()=>{})
+               }
+        },where(documentId(),'==','08ORLO3C2HSF4aCTZwcf'))
+    },[user])
     return <div className='ListMess'>
 
        {children}
