@@ -113,9 +113,9 @@ export default  function Header(){
         <div className="user-icon">
             {!user?.name?  <div onClick={()=>setLogin(true)} className="bottion-icon"> Đăng nhập</div>:
             <><div className="user-button">          <img className="opennoti" src={icon.mess.src}></img>
-            <div className="notinumber">
+           {listNott.length>0&& <div className="notinumber">
                 {listNott.length}
-            </div>
+            </div>}
        {openNoti&& <NotificationEl listNott={listNott}></NotificationEl>}
             </div>
             <div className="user-button">          <img src={icon.bell.src}></img></div>
