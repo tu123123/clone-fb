@@ -14,6 +14,12 @@
     left: 0;
     background: rgba(255, 255, 255, 0.788);
 }
+.Loading2{
+    img{
+        height: 30px;
+    }
+    background: rgba(114, 113, 113, 0.788);
+}
 @keyframes aniLoad {
      0%{
         transform: rotate(-360deg);

@@ -46,6 +46,7 @@
             }
         }
         .Messenger-content{ 
+            position: relative;
             scroll-behavior: smooth;
             display: grid;
             grid-auto-rows: max-content;

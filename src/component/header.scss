@@ -1,4 +1,40 @@
 .header-component{
+    .notinumber{
+        position: absolute;
+        top: 0;
+        right: -5px;
+        background: rgb(255, 23, 23);
+        width: 20px;
+        height: 20px;
+        display: flex;
+        justify-content: center;
+        color: white;
+        font-size: 12px;
+        border-radius: 50%;
+        align-items: center;
+    }
+    .notification{
+        position: absolute;
+        color: rgb(183, 183, 183);
+        background: rgb(82, 82, 82);
+        right: 0;
+        max-width: 80vw;
+        width: 300px;
+        top: 40px;
+        z-index: 10;
+        border-radius: 5px;
+        padding: 10px;
+    }
+    .NotiItem{
+        display: flex;
+        gap: 10px;
+        .NotiItem-content{
+            font-size: 15px;
+            color: rgb(187, 187, 187);
+            flex: 1;
+            word-break: break-all;
+        }
+    }
     .menu2{
        transform: translate(-100vw);
         transition: 0.3s;
@@ -103,6 +139,7 @@
         gap:10px
     }
     .user-button{
+        position: relative;
         display: flex;
         height: 40px;
         width:  40px;

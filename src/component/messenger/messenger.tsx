@@ -10,10 +10,12 @@ import { HomeContext } from '@/app/page'
 import moment from 'moment'
 import { v4 } from 'uuid'
 import Link from 'next/link'
+import { Loading2 } from '../loading/loading'
+import { message } from 'antd'
 
 
 
-const MessItem=({value}:{value:{time:string,id:string,chat:string,imgURL:string}})=>{
+const MessItem=({value}:{value:any})=>{
     const {user}=useContext(HomeContext)
     return <div className={`MessItem ${value.id==user.id&&'userchat'}`}>
         <Avatar img={value.imgURL}></Avatar>
@@ -33,11 +35,30 @@ const MessInput=({data,value}:{data:any,value:any})=>{
         updateData('messenger',data?.id,{
             chats:[...data.chats,{...user,chat:text,idchat:v4(),time:moment().format('DD/MM/YYYY HH:mm')}]
         },()=>{
+            getData2('thongbaotinnhan',(e:any)=>{
+                let find=e.find((i:any)=>i.userSend.id==user.id)
+                if(find)
+                    {
+                        updateData('thongbaotinnhan',find.id,{
+                            message:text
+                        },()=>{
 
+                        },()=>{})
+                    }
+                else{
+                    addData('thongbaotinnhan',{
+                        message:text,
+                        userid:value.id,
+                        userSend:{...user},
+                        read:false,
+                        time:moment().format('DD/MM/YYYY HH:mm')
+                    },()=>{})
+                }
+            },where('userid','==',value.id))
         },()=>{})
     }
     return <div className='MessInput'>
-        <textarea onKeyPress={(e:any)=>{
+        <textarea autoFocus onKeyPress={(e:any)=>{
         if(e.key=='Enter'&&e.shiftKey) return
         
         if(e.key=='Enter'){
@@ -55,27 +76,49 @@ const MessInput=({data,value}:{data:any,value:any})=>{
 })=>{
     const {user,setListChat}=useContext(HomeContext)
     const [chat,setChat]=useState<any>({})
+    const [loading,setLoading]=useState(true)
     const count=useRef(1)
+    const getDataChat=()=>{
+        getData('messenger',((e:any)=>{
+            setLoading(false)
+            if(e[0])
+            setChat(e.find((i:any)=>i.member.find((a:string)=>a==value.id)))
+            
+                
+            
+                   
+                }),where('member','array-contains',user.id))
+           }
+    
     useEffect(()=>{
         if(count.current==1)
        {
-      
-   
-        getData('messenger',((e:any)=>{
-  
-        if(e[0])
-        setChat(e.find((i:any)=>i.member.find((a:string)=>a==value.id)))
         
-            
+                getData2('messenger',((e:any)=>{
     
-               
-            }),where('member','array-contains',user.id))
-       }
+                        if(!e?.find((i:any)=>i.member.find((a:string)=>a==i.id)))
+                            {
+                           
+                            addData('messenger',{
+                                member:[user.id,value.id],
+                                chats:[]
+                            },()=>{    
+
+                                getDataChat()  
+                            })}
+                            else getDataChat()
+     
+                            }),where('member','array-contains',user.id)
+                         
+                    
+                    )}
+  
         count.current=2
        return ()=>{}
     },[])
    
     return <div className='Messenger'>
+
         <div className={`Messenger-header`}>
             <Link href={'/'+value.id}><Avatar img={value.imgURL}></Avatar></Link>
             <p> {value.name}</p>
@@ -91,6 +134,7 @@ const MessInput=({data,value}:{data:any,value:any})=>{
             if(e)
             e.scrollTop=e.scrollHeight
         }} className='Messenger-content' >
+           {loading&& <Loading2></Loading2>}
           {chat?.chats?.map((i:{idchat:string})=>{
             return   <MessItem key={i.idchat} value={i}></MessItem>
           })}
