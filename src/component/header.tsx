@@ -34,6 +34,7 @@ const NotificationEl=({listNott}:{listNott:any})=>{
 export default  function Header(){
     const [listNott,setListNoti]=useState([])
     useEffect(()=>{
+        if(getUser())
         getData('thongbaotinnhan',(e:any)=>{
            setListNoti(e)
         },where('userid','==',getUser().id))
