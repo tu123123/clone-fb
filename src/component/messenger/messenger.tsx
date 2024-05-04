@@ -20,7 +20,7 @@ const MessItem=({value,list,index}:{value:any,list:any,index:number})=>{
     const {user}=useContext(HomeContext)
     return <div className={`MessItem ${value.id==user.id&&'userchat'}`}>
        {value.id==user.id?<></>:item&&item.id==value.id?<div style={{
-        width:30
+        minWidth:30
        }}></div>: <Avatar img={value.imgURL}></Avatar>}
         <div className='MessItem-content'>
             <p>{value.chat}</p>
