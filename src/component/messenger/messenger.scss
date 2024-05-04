@@ -6,6 +6,11 @@
     gap: 10px;
     .userchat{
         flex-direction: row-reverse;
+       .MessItem-content{
+        p{
+            background: rgb(53, 160, 236) !important;
+        }
+       }
 
     }
     .MessItem-content-time{

@@ -214,16 +214,16 @@ const CommentItem= ({rep=true,onRef,value}:{rep?:boolean,onRef?:any,value:any})=
         <div className='comment-container'>
         <div className='CommentItem-content'>
         
-        <p ref={(e)=>{
+        <p ref={(e:HTMLParagraphElement)=>{
             refele.current=e
                 if(onRef){
                
                     onRef(e)
                 }
-                if(e&&value.comment.includes('http'))
+                if(e&&(value.comment.includes('http')||value.comment.split('.').length>1))
                     {
                         let strArr=value.comment.split(' ')
-                        let indx=strArr.findIndex((i:any)=>i.includes('http')||i.includes('.'))
+                        let indx=strArr.findIndex((i:any)=>i.includes('http')||i.split('.').length>1)
                         strArr[indx]=`<a href='${strArr[indx]}'>${strArr[indx]}</a>`
                         e.innerHTML=`${value.name}<br>`+strArr.join(' ')
                     }
@@ -391,10 +391,10 @@ const Blog=({data}:any)=>{
         </div>
         <div className='Blog-content'>
             <p ref={(e:any)=>{
-                 if(e&&data?.content.includes('https:'))
+                 if(e&&(data?.content.includes('http')||data?.content.split('.').length>1))
                     {
                         let strArr=data?.content.split(' ')
-                        let indx=strArr.findIndex((i:any)=>i.includes('https:'))
+                        let indx=strArr.findIndex((i:any)=>i.includes('http')||i.split('.').length>1)
                         strArr[indx]=`<a href='${strArr[indx]}'>${strArr[indx]}</a>`
                         e.innerHTML=strArr.join(' ')
                     }
