@@ -60,7 +60,8 @@
         .MessItem{
             overflow: auto;
             width: 100%;
-            padding: 10px;
+            padding: 0px 10px;
+            margin-top: 5px;
             display: flex;
         
             .avatar{

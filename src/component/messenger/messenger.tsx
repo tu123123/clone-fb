@@ -15,10 +15,13 @@ import { message } from 'antd'
 
 
 
-const MessItem=({value}:{value:any})=>{
+const MessItem=({value,list,index}:{value:any,list:any,index:number})=>{
+    let item=list[index-1]
     const {user}=useContext(HomeContext)
     return <div className={`MessItem ${value.id==user.id&&'userchat'}`}>
-        <Avatar img={value.imgURL}></Avatar>
+       {value.id==user.id?<></>:item&&item.id==value.id?<div style={{
+        width:30
+       }}></div>: <Avatar img={value.imgURL}></Avatar>}
         <div className='MessItem-content'>
             <p>{value.chat}</p>
             <div className='MessItem-content-time'>{moment(value.time,'DD/MM/YYYY HH:mm').toNow()}</div>
@@ -137,8 +140,8 @@ const MessInput=({data,value}:{data:any,value:any})=>{
             e.scrollTop=e.scrollHeight
         }} className='Messenger-content' >
            {loading&& <Loading2></Loading2>}
-          {chat?.chats?.map((i:{idchat:string})=>{
-            return   <MessItem key={i.idchat} value={i}></MessItem>
+          {chat?.chats?.map((i:{idchat:string},index:number)=>{
+            return   <MessItem key={i.idchat} index={index} list={chat?.chats} value={i}></MessItem>
           })}
      
         </div>
