@@ -23,7 +23,7 @@ body {
   background: black;
   height: 100vh;
   display: grid;
-  grid-template-rows: max-content 1fr ;
+  grid-template-rows: max-content 1fr;
 }
 
 @layer utilities {
