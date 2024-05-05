@@ -274,7 +274,13 @@ const CommentItem = ({
           <span className="onlike">Thích</span>
         </>
       ),
-      img: <img width={20} src={icon.likeReaction.src}></img>,
+      img: (
+        <img
+          width={20}
+          style={{ height: 20 }}
+          src={icon.likeReaction.src}
+        ></img>
+      ),
     },
     {
       data: value.love,
@@ -283,7 +289,7 @@ const CommentItem = ({
           <span className="onlove">Yêu thích</span>
         </>
       ),
-      img: <img width={20} src={icon.love.src}></img>,
+      img: <img width={20} style={{ height: 20 }} src={icon.love.src}></img>,
     },
     {
       data: value.care,
@@ -292,7 +298,7 @@ const CommentItem = ({
           <span className="onother">Thương thương</span>
         </>
       ),
-      img: <img width={20} src={icon.care.src}></img>,
+      img: <img width={20} style={{ height: 20 }} src={icon.care.src}></img>,
     },
     {
       data: value.haha,
@@ -302,7 +308,7 @@ const CommentItem = ({
           <span className="onother">Haha</span>
         </>
       ),
-      img: <img width={20} src={icon.haha.src}></img>,
+      img: <img width={20} style={{ height: 20 }} src={icon.haha.src}></img>,
     },
     {
       data: value.wow,
@@ -312,7 +318,7 @@ const CommentItem = ({
           <span className="onother">Wow</span>
         </>
       ),
-      img: <img width={20} src={icon.wow.src}></img>,
+      img: <img width={20} style={{ height: 20 }} src={icon.wow.src}></img>,
     },
     {
       data: value.sad,
@@ -322,7 +328,7 @@ const CommentItem = ({
           <span className="onother">Buồn</span>
         </>
       ),
-      img: <img width={20} src={icon.sad.src}></img>,
+      img: <img width={20} style={{ height: 20 }} src={icon.sad.src}></img>,
     },
     {
       data: value.angry,
@@ -331,7 +337,7 @@ const CommentItem = ({
           <span className="onother">Phẫn nộ</span>
         </>
       ),
-      img: <img width={20} src={icon.angry.src}></img>,
+      img: <img width={20} style={{ height: 20 }} src={icon.angry.src}></img>,
     },
   ];
 
@@ -514,7 +520,7 @@ const CommentItem = ({
                         }
                       </div>
                     ) : (
-                      <></>
+                      false
                     )
                   }
                   content={

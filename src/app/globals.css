@@ -26,6 +26,10 @@ body {
   grid-template-rows: max-content 1fr;
 }
 
+.ant-popover-title {
+  min-width: fit-content !important;
+}
+
 @layer utilities {
   .text-balance {
     text-wrap: balance;

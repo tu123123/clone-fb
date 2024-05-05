@@ -59,6 +59,21 @@ const ReactionIcon = ({
         ? newData
         : {
             comments: data.comments.map((item: any) => {
+              item.comments = (item.comments || []).map((childComment: any) => {
+                if (
+                  childComment.comment == objectFind.comment &&
+                  childComment.id == objectFind.id &&
+                  childComment.time == objectFind.time
+                ) {
+                  return {
+                    ...childComment,
+                    ...newData,
+                  };
+                }
+                return childComment;
+              });
+
+              if (item.comments.length == 0) delete item.comments;
               if (item.idcmt == objectFind.idcmt) {
                 return {
                   ...item,
