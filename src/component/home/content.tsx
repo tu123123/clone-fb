@@ -919,7 +919,10 @@ const Blog = ({ data }: any) => {
                         .map((content: any, cIndex: number) => {
                           return (
                             <div key={cIndex}>
-                              {listUser.find((x: any) => x.id == content).name}
+                              {
+                                listUser?.find((x: any) => x.id == content)
+                                  ?.name
+                              }
                             </div>
                           );
                         })}
