@@ -1,6 +1,7 @@
 .icon-container {
   position: absolute;
   visibility: hidden;
+  z-index: 1;
   transform: translateY(10px);
   opacity: 0;
   transition: all 0.4s;
@@ -38,8 +39,7 @@
 }
 
 .no-bottom {
-  top: -15px;
-  bottom: unset;
+  bottom: 25px;
   left: 0px;
   transform: translateY(0px);
 }
