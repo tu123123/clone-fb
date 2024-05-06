@@ -89,6 +89,24 @@ export default function Header() {
         },
         () => {}
       );
+      updateData(
+        "useronline",
+        "oP9nStpYYKAwiDCcvBjT",
+        { online: [getUser().id] },
+        () => {},
+        () => {}
+      );
+      getData("useronline", (e: any) => {
+        if (!e[0].online.find((i: string) => i == getUser().id)) {
+          updateData(
+            "useronline",
+            "oP9nStpYYKAwiDCcvBjT",
+            { online: [...e[0].online, getUser().id] },
+            () => {},
+            () => {}
+          );
+        }
+      });
       window.addEventListener("beforeunload", (ev) => {
         updateData(
           "user",
