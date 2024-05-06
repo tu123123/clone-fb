@@ -497,103 +497,103 @@ const CommentItem = ({
                 Phản hồi
               </div>
               {countReaction(value) > 0 && (
-                <Popover
-                  overlayInnerStyle={{
-                    width:
+                <div className="CommentItem-like">
+                  <Popover
+                    overlayInnerStyle={{
+                      width:
+                        renderReactionArray.filter(
+                          (x) => x.data && x.data.length > 0
+                        ).length == 1
+                          ? "unset"
+                          : 50,
+                    }}
+                    arrow={false}
+                    placement="bottom"
+                    title={
                       renderReactionArray.filter(
                         (x) => x.data && x.data.length > 0
-                      ).length == 1
-                        ? "unset"
-                        : 50,
-                  }}
-                  arrow={false}
-                  placement="bottom"
-                  title={
-                    renderReactionArray.filter(
-                      (x) => x.data && x.data.length > 0
-                    ).length == 1 ? (
-                      <div
-                        style={{
-                          display: "flex",
-                          alignItems: "center",
-                          gap: "5px",
-                        }}
-                      >
-                        {
-                          renderReactionArray.find(
+                      ).length == 1 ? (
+                        <div
+                          style={{
+                            display: "flex",
+                            alignItems: "center",
+                            gap: "5px",
+                          }}
+                        >
+                          {
+                            renderReactionArray.find(
+                              (x) => x.data && x.data.length > 0
+                            )?.img
+                          }{" "}
+                          {
+                            renderReactionArray.find(
+                              (x) => x.data && x.data.length > 0
+                            )?.data.length
+                          }
+                        </div>
+                      ) : (
+                        false
+                      )
+                    }
+                    content={
+                      renderReactionArray.filter(
+                        (x) => x.data && x.data.length > 0
+                      ).length == 1 ? (
+                        <div>
+                          {(
+                            renderReactionArray.find(
+                              (x) => x.data && x.data.length > 0
+                            )?.data || []
+                          )
+                            .slice(0, 20)
+                            .map((content: any, cIndex: number) => {
+                              return (
+                                <div key={cIndex}>
+                                  {
+                                    listUser?.find((x: any) => x.id == content)
+                                      ?.name
+                                  }
+                                </div>
+                              );
+                            })}
+                          {renderReactionArray.find(
                             (x) => x.data && x.data.length > 0
-                          )?.img
-                        }{" "}
-                        {
-                          renderReactionArray.find(
-                            (x) => x.data && x.data.length > 0
-                          )?.data.length
-                        }
-                      </div>
-                    ) : (
-                      false
-                    )
-                  }
-                  content={
-                    renderReactionArray.filter(
-                      (x) => x.data && x.data.length > 0
-                    ).length == 1 ? (
-                      <div>
-                        {(
-                          renderReactionArray.find(
-                            (x) => x.data && x.data.length > 0
-                          )?.data || []
-                        )
-                          .slice(0, 20)
-                          .map((content: any, cIndex: number) => {
-                            return (
-                              <div key={cIndex}>
-                                {
-                                  listUser.find((x: any) => x.id == content)
-                                    .name
-                                }
-                              </div>
-                            );
-                          })}
-                        {renderReactionArray.find(
-                          (x) => x.data && x.data.length > 0
-                        )?.data.length > 20 && <div>...</div>}
-                      </div>
-                    ) : (
-                      <div>
-                        {renderReactionArray
-                          .filter((x) => x.data && x.data.length > 0)
-                          .map((content: any, cIndex: number) => {
-                            return (
-                              <div
-                                style={{
-                                  display: "flex",
-                                  alignItems: "center",
-                                  gap: "5px",
-                                }}
-                                key={cIndex}
-                              >
-                                {content.img} {content.data.length}
-                              </div>
-                            );
-                          })}
-                      </div>
-                    )
-                  }
-                >
-                  <div className="CommentItem-like">
+                          )?.data.length > 20 && <div>...</div>}
+                        </div>
+                      ) : (
+                        <div>
+                          {renderReactionArray
+                            .filter((x) => x.data && x.data.length > 0)
+                            .map((content: any, cIndex: number) => {
+                              return (
+                                <div
+                                  style={{
+                                    display: "flex",
+                                    alignItems: "center",
+                                    gap: "5px",
+                                  }}
+                                  key={cIndex}
+                                >
+                                  {content.img} {content.data.length}
+                                </div>
+                              );
+                            })}
+                        </div>
+                      )
+                    }
+                  >
                     <div className="CommnetItem-contain">
                       <div>{countReaction(value)}</div>
                       {renderReactionArray
                         .filter((x) => x.data && x.data.length > 0)
-                        .sort((a, b) => a.data.length - b.data.length)
+                        .sort((a, b) => b.data.length - a.data.length)
                         .slice(0, 2)
                         .map((item, index) => (
                           <div key={index}>{item.img}</div>
                         ))}
                     </div>
-                  </div>
-                </Popover>
+                  </Popover>
+                </div>
               )}
             </div>
           </div>
@@ -984,7 +984,7 @@ const Blog = ({ data }: any) => {
           <div className="reaction-container">
             {renderReactionArray
               .filter((x) => x.data && x.data.length > 0)
-              .sort((a, b) => a.data.length - b.data.length)
+              .sort((a, b) => b.data.length - a.data.length)
               .slice(0, 2)
               .map((item, index) => (
                 <Popover
