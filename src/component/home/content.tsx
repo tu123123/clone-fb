@@ -703,14 +703,14 @@ export const CommentInput = ({
   };
   const enter = (e?: any) => {
     if (e) e.preventDefault();
-    if (text.trim() == "") return;
+    if (text.trim() == "" && imgfile.current == "") return;
     setText("");
     if (img.current && imgfile.current && imgdel.current) {
       imgdel.current.style.display = "none";
       img.current.innerHTML = "";
     }
 
-    if (value || imgfile.current) {
+    if (value) {
       if (imgfile.current) {
         let imgRef = ref(imgDb, "files/" + v4() + imgfile.current.data.name);
         uploadBytes(imgRef, imgfile.current.data).then((res) => {
