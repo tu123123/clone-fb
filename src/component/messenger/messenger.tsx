@@ -1,6 +1,11 @@
 "use client";
 import Image from "next/image";
-import { Avatar, CommentInput, getSrcFromFile } from "../home/content";
+import {
+  Avatar,
+  CommentInput,
+  addNotifications,
+  getSrcFromFile,
+} from "../home/content";
 import "./messenger.scss";
 import { icon } from "../icon";
 import {
@@ -75,7 +80,7 @@ const MessInput = ({ data, value }: { data: any; value: any }) => {
       data?.id,
       {
         chats: [
-          ...data.chats,
+          ...(data.chats || []),
           {
             ...user,
             img: url,
@@ -86,6 +91,12 @@ const MessInput = ({ data, value }: { data: any; value: any }) => {
         ],
       },
       () => {
+        addNotifications({
+          thongbao: text,
+          title: user.name + " đã gửi tin nhắn mới",
+          userid: user.name,
+          userget: value.id,
+        });
         getData2(
           "thongbaotinnhan",
           (e: any) => {
@@ -252,7 +263,7 @@ const Messenger = ({ value }: { value: any }) => {
     count.current = 2;
     return () => {};
   }, []);
-
+  const [counts, setCount] = useState(10);
   return (
     <div className="Messenger">
       <div className={`Messenger-header`}>
@@ -276,22 +287,36 @@ const Messenger = ({ value }: { value: any }) => {
         </div>
       </div>
       <div
+        onScroll={(e: any) => {
+          if (
+            e.target.scrollTop < 100 &&
+            e.target.scrollHeight > 500 &&
+            counts < chat?.chats.length
+          ) {
+            setCount(counts + 10);
+          }
+        }}
         ref={(e: HTMLDivElement) => {
           if (e) e.scrollTop = e.scrollHeight;
         }}
         className="Messenger-content"
       >
         {loading && <Loading2></Loading2>}
-        {chat?.chats?.map((i: { idchat: string }, index: number) => {
-          return (
-            <MessItem
-              key={i.idchat}
-              index={index}
-              list={chat?.chats}
-              value={i}
-            ></MessItem>
-          );
-        })}
+        {chat?.chats
+          ?.slice(
+            chat?.chats.length - counts >= 0 ? chat?.chats.length - counts : 0,
+            chat?.chats.length
+          )
+          .map((i: { idchat: string }, index: number) => {
+            return (
+              <MessItem
+                key={i.idchat}
+                index={index}
+                list={chat?.chats}
+                value={i}
+              ></MessItem>
+            );
+          })}
       </div>
       <div className="Messenger-footer">
         <MessInput value={value} data={chat}></MessInput>

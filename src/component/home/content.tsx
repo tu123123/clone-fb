@@ -26,7 +26,7 @@ import {
 import { Button, Popover, Upload } from "antd";
 import { HomeContext } from "@/app/page";
 import moment from "moment";
-import { documentId, where } from "firebase/firestore";
+import { count, documentId, where } from "firebase/firestore";
 import addNotification from "react-push-notification";
 import { title } from "process";
 import { UserContext } from "@/app/[myid]/page";
@@ -629,7 +629,7 @@ const CommentItem = ({
     </div>
   );
 };
-const addNotifications = (notifi: any) => {
+export const addNotifications = (notifi: any) => {
   updateData(
     "realtime",
     "CGz3WFV4WK4cKndhHFSX",
@@ -676,6 +676,7 @@ export const CommentInput = ({
             thongbao: text,
             title: (user.name || userhome.name) + " đã gửi tin nhắn mới",
             userid: user.name || userhome.name,
+            userget: "",
           });
         },
         (e: any) => {
@@ -940,6 +941,7 @@ const Blog = ({ data }: any) => {
     );
   }, []);
   const [cmt, setCmt] = useState<boolean>(false);
+
   return (
     <div className="Blog">
       <div className="Blog-head">
@@ -1117,23 +1119,28 @@ export default function HomeContent({
   };
 }) {
   const [blogs, setBlogs] = useState<any>([]);
-  const { user }: any = useContext(HomeContext);
+  const { user, counts, setcounts }: any = useContext(HomeContext);
   useEffect(() => {
     getData("blog", (e: any) => {
       let arr: any = [...e].reverse();
+      setcounts.current = arr.length;
       setBlogs([...arr]);
     });
     getData(
       "realtime",
       (e: any) => {
-        if (e[0]?.thongbao) {
-          addNotification({
-            title: e[0].title,
-            subtitle: e[0].userid,
-            message: e[0].thongbao,
-            theme: "darkblue",
-            native: true,
-          });
+        if (e[0]?.thongbao && user) {
+          if (
+            e[0]?.userget == user.id ||
+            (!e[0]?.userget && e[0]?.userid !== user.id)
+          )
+            addNotification({
+              title: e[0].title,
+              subtitle: e[0].userid,
+              message: e[0].thongbao,
+              theme: "darkblue",
+              native: true,
+            });
           addNotifications({ thongbao: "", title: "", userid: "" });
         }
       },
@@ -1141,17 +1148,20 @@ export default function HomeContent({
     );
   }, []);
 
+  const arrfilter = () => {
+    return blogs?.filter((i: any) => {
+      if (!params) return true;
+      return i.userid === params.myuser.userid;
+    });
+  };
   return (
     <div className="HomeContent">
       {!params && <ListCard></ListCard>}
       {(!params || (params && params.myid == params.myuser?.id)) && (
         <AddStatus></AddStatus>
       )}
-      {blogs
-        ?.filter((i: any) => {
-          if (!params) return true;
-          return i.userid === params.myuser.userid;
-        })
+      {arrfilter()
+        .slice(0, counts)
         .map((i: any) => {
           return <Blog data={i} key={i.id}></Blog>;
         })}
