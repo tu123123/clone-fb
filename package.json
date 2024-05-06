@@ -6,8 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next dev",
-    "lint": "next lint",
-    "run": "node server.js"
+    "lint": "next lint"
   },
   "dependencies": {
     "@types/js-cookie": "^3.0.6",
