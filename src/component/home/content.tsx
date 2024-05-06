@@ -1045,7 +1045,7 @@ const Blog = ({ data }: any) => {
             }
             if (oldType == "") listlike.push(user.id);
 
-            let newData = {
+            let newData: any = {
               likes: listlike,
             };
 
