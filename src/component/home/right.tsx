@@ -7,10 +7,15 @@ import { HomeContext } from "@/app/page";
 import { and, where } from "firebase/firestore";
 import Link from "next/link";
 import moment from "moment";
+import io from "socket.io-client";
+import { URL_SOCKET } from "@/app/constant";
+
+const socket = io(URL_SOCKET, { transports: ["websocket"] });
 
 function ListContract() {
   const { setListChat, user } = useContext(HomeContext);
   const [listonline, setListOnline] = useState([]);
+  const [listOnlineSocket, setListOnlineSocket] = useState([]);
   const [users, setUsers] = useState<any>();
   useEffect(() => {
     if (user)
@@ -21,6 +26,28 @@ function ListContract() {
       setListOnline(e[0]?.online || []);
     });
   }, [user]);
+
+  useEffect(() => {
+    socket.on("user status", (user) => {
+      if (user.status == "online") {
+        setListOnlineSocket(user.onlineUsers);
+        setListOnlineSocket((prevState) => {
+          if (prevState.includes(user.userId)) return prevState;
+          return [...prevState, user.userId];
+        });
+      } else if (user.status == "offline") {
+        setListOnlineSocket((prevState) => {
+          let index = prevState.findIndex((item) => item == user.userId);
+          const newArr = [...prevState];
+          if (index != -1) newArr.splice(index, 1);
+          return newArr;
+        });
+      }
+    });
+    return () => {
+      socket.off("user status");
+    };
+  }, []);
 
   return (
     <div className="ListContract">
@@ -81,7 +108,7 @@ function ListContract() {
                   });
                 }}
                 className={`UserItem ${
-                  listonline.find((a: any) => a == i.id) && "online"
+                  listOnlineSocket.find((a: any) => a == i.id) && "online"
                 }`}
               >
                 <Avatar img={i.imgURL}></Avatar> <p>{i.name}</p>
