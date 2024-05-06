@@ -92,7 +92,7 @@ export const Avatar = ({ img }: { img?: string }) => {
 interface ModalCreateBlogType {
   onClose: () => void;
 }
-const getSrcFromFile = (file: any) => {
+export const getSrcFromFile = (file: any) => {
   return new Promise((resolve) => {
     const reader = new FileReader();
     reader.readAsDataURL(file);

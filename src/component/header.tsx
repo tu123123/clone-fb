@@ -74,20 +74,12 @@ export default function Header() {
       }
     });
     if (getUser()) {
-      updateData(
+      getData2(
         "user",
-        getUser().id,
-        { online: true },
-        () => {
-          getData2(
-            "user",
-            (e: any) => {
-              setUser(e[0]);
-            },
-            where(documentId(), "==", getUser()?.id)
-          );
+        (e: any) => {
+          setUser(e[0]);
         },
-        () => {}
+        where(documentId(), "==", getUser()?.id)
       );
       updateData(
         "useronline",

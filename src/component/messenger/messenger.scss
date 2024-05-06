@@ -1,108 +1,142 @@
-.ListMess{
-    position: fixed;
-    bottom: 0;
-    right: 30px;
+.ListMess {
+  position: fixed;
+  bottom: 0;
+  right: 30px;
+  display: flex;
+  gap: 10px;
+  .userchat {
+    flex-direction: row-reverse;
+    .MessItem-content {
+      p {
+        background: rgb(53, 160, 236) !important;
+      }
+    }
+  }
+  .MessItem-content-time {
+    font-size: 12px;
+    color: rgb(155, 155, 155);
+  }
+  .MessInput {
+    flex-wrap: wrap;
+    .img {
+      min-width: 100%;
+      .img-content {
+        width: fit-content;
+        position: relative;
+      }
+
+      .onclose {
+        img {
+          height: 20px;
+          display: none;
+          background: white;
+          min-width: 20px;
+          transition: 0.2s;
+          cursor: pointer;
+          &:hover {
+            scale: 1.2;
+          }
+          border-radius: 50%;
+        }
+        position: absolute;
+        top: 0;
+        right: 0;
+      }
+
+      img {
+        margin-top: 5px;
+        margin-left: 5px;
+        margin-bottom: 5px;
+        height: 50px;
+      }
+    }
     display: flex;
     gap: 10px;
-    .userchat{
-        flex-direction: row-reverse;
-       .MessItem-content{
-        p{
-            background: rgb(53, 160, 236) !important;
-        }
-       }
+    padding: 10px;
+    textarea {
+      flex: 1;
+      height: fit-content;
+      background: rgb(94, 94, 94);
+      resize: none;
+      border-radius: 10px;
+      color: white;
+      border: none;
+      outline: none;
+      padding: 5px;
+    }
+  }
+  .Messenger {
+    height: 450px;
+    width: 300px;
+    min-width: 300px;
+    background: rgb(59, 59, 59);
+    border-radius: 10px 10px 0 0;
+    overflow: hidden;
+    display: grid;
+    grid-template-columns: 1fr;
+    overflow: auto;
+    grid-template-rows: max-content 1fr max-content;
 
+    .Messenger-button {
+      img {
+        cursor: pointer;
+      }
     }
-    .MessItem-content-time{
-        font-size: 12px;
-        color: rgb(155, 155, 155);
+    .Messenger-content {
+      position: relative;
+      scroll-behavior: smooth;
+      display: grid;
+      grid-auto-rows: max-content;
+      overflow: auto;
     }
-    .MessInput{
-        display: flex;
-        gap:10px;
-        padding: 10px;
-        textarea{
-            flex: 1;
-            height: fit-content;
-            background: rgb(94, 94, 94);
-            resize: none;
-            border-radius: 10px;
-            color: white;
-            border: none;
-            outline: none;
-            padding: 5px;
-        }
-    }
-    .Messenger{
-        height: 450px;
-        width: 300px;
-        min-width: 300px;
-        background: rgb(59, 59, 59);
-        border-radius: 10px 10px 0 0;
-        overflow: hidden;
-        display: grid;
-        grid-template-columns: 1fr;
+    .MessItem {
+      overflow: auto;
+      width: 100%;
+      padding: 0px 10px;
+      margin-top: 5px;
+      display: flex;
+
+      .avatar {
+        min-width: 30px;
+        max-width: 30px;
+        height: 30px;
+      }
+      color: white;
+      p {
+        background: gray;
+        word-break: normal;
+        width: 100%;
+        white-space: pre-line;
+        overflow-wrap: break-word;
+        display: inline-block;
+        padding: 5px;
+        border-radius: 5px;
+      }
+      gap: 10px;
+      .MessItem-content {
         overflow: auto;
-        grid-template-rows: max-content 1fr max-content;
-
-        .Messenger-button{
-            img{
-                cursor: pointer;
-            }
+        img {
+          border-radius: 10px;
+          max-width: 200px;
         }
-        .Messenger-content{ 
-            position: relative;
-            scroll-behavior: smooth;
-            display: grid;
-            grid-auto-rows: max-content;
-            overflow: auto;
-        }
-        .MessItem{
-            overflow: auto;
-            width: 100%;
-            padding: 0px 10px;
-            margin-top: 5px;
-            display: flex;
-        
-            .avatar{
-                min-width: 30px;
-                max-width: 30px;
-                height: 30px;
-            }
-            color: white;
-            p{
-                background: gray;
-                word-break: normal;
-                width: 100%;
-                white-space: pre-line;
-                overflow-wrap: break-word;
-                display: inline-block;
-                padding: 5px;
-                border-radius: 5px;
-            }
-            gap: 10px;
-            .MessItem-content{
-             overflow: auto;
-             
-            }
-        }
-        .Messenger-header{
-            display: flex;
-            gap: 10px;
-            align-items: center;
-            padding: 5px;
-            font-size: 15px;
-            .avatar{
-                min-width: 30px;
-                max-width: 30px;
-                height: 30px;
-            }
-            color: white;
-            background: rgb(69, 69, 69);
-            p{
-                flex: 1;
-               
-            }
-        }
+      }
     }
+    .Messenger-header {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      padding: 5px;
+      font-size: 15px;
+      .avatar {
+        min-width: 30px;
+        max-width: 30px;
+        height: 30px;
+      }
+      color: white;
+      background: rgb(69, 69, 69);
+      p {
+        flex: 1;
+      }
+    }
+  }
 }
