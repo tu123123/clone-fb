@@ -75,27 +75,20 @@ export default function Header() {
     });
     if (getUser()) {
       updateData(
-        "useronline",
-        "oP9nStpYYKAwiDCcvBjT",
-        { time: moment().format("DD/MM/YYYY HH:mm"), online: [getUser().id] },
-        () => {},
+        "user",
+        getUser().id,
+        { online: true },
+        () => {
+          getData2(
+            "user",
+            (e: any) => {
+              setUser(e[0]);
+            },
+            where(documentId(), "==", getUser()?.id)
+          );
+        },
         () => {}
       );
-      // updateData(
-      //   "user",
-      //   getUser().id,
-      //   { online: true },
-      //   () => {
-      //     getData2(
-      //       "user",
-      //       (e: any) => {
-      //         setUser(e[0]);
-      //       },
-      //       where(documentId(), "==", getUser()?.id)
-      //     );
-      //   },
-      //   () => {}
-      // );
       window.addEventListener("beforeunload", (ev) => {
         updateData(
           "user",

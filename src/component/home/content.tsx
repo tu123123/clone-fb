@@ -727,7 +727,18 @@ export const CommentInput = ({
             getupdate();
           });
         });
-      } else getupdate();
+      } else {
+        value.comments = [
+          ...(value.comments || []),
+          {
+            ...getUser(),
+            time: moment().format("MM/DD/YYYY HH:mm"),
+            img: "",
+            comment: text,
+          },
+        ];
+        getupdate();
+      }
     } else if (imgfile.current) {
       let imgRef = ref(imgDb, "files/" + v4() + imgfile.current.data.name);
       uploadBytes(imgRef, imgfile.current.data).then((res) => {
