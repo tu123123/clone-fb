@@ -23,7 +23,11 @@ body {
   background: black;
   height: 100vh;
   display: grid;
-  grid-template-rows: max-content 1fr ;
+  grid-template-rows: max-content 1fr;
+}
+
+.ant-popover-title {
+  min-width: fit-content !important;
 }
 
 @layer utilities {

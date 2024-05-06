@@ -9,6 +9,7 @@ import Cookies from "js-cookie";
 import { Avatar, getUser } from "./home/content";
 import { getData, getData2, updateData } from "./firebase/config";
 import { documentId, where } from "firebase/firestore";
+import moment from "moment";
 const NotiItem = ({ value }: { value: any }) => {
   return (
     <div className="NotiItem">
@@ -74,20 +75,27 @@ export default function Header() {
     });
     if (getUser()) {
       updateData(
-        "user",
-        getUser().id,
-        { online: true },
-        () => {
-          getData2(
-            "user",
-            (e: any) => {
-              setUser(e[0]);
-            },
-            where(documentId(), "==", getUser()?.id)
-          );
-        },
+        "useronline",
+        "oP9nStpYYKAwiDCcvBjT",
+        { time: moment().format("DD/MM/YYYY HH:mm"), online: [getUser().id] },
+        () => {},
         () => {}
       );
+      // updateData(
+      //   "user",
+      //   getUser().id,
+      //   { online: true },
+      //   () => {
+      //     getData2(
+      //       "user",
+      //       (e: any) => {
+      //         setUser(e[0]);
+      //       },
+      //       where(documentId(), "==", getUser()?.id)
+      //     );
+      //   },
+      //   () => {}
+      // );
       window.addEventListener("beforeunload", (ev) => {
         updateData(
           "user",
