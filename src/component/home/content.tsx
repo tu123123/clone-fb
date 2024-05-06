@@ -653,6 +653,7 @@ export const CommentInput = ({
   let img = useRef<any>("");
   let imgfile = useRef<any>("");
   const getupdate = (add = false, url = "") => {
+    imgfile.current = "";
     let listcomment = data.comments || [];
     if (add)
       updateData(
@@ -705,12 +706,11 @@ export const CommentInput = ({
     if (text.trim() == "") return;
     setText("");
     if (img.current && imgfile.current && imgdel.current) {
-      imgfile.current = "";
-      img.current.innerHTML = "";
       imgdel.current.style.display = "none";
+      img.current.innerHTML = "";
     }
 
-    if (value) {
+    if (value || imgfile.current) {
       if (imgfile.current) {
         let imgRef = ref(imgDb, "files/" + v4() + imgfile.current.data.name);
         uploadBytes(imgRef, imgfile.current.data).then((res) => {
