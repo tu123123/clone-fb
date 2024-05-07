@@ -15,7 +15,6 @@ const socket = io(URL_SOCKET, { transports: ["websocket"] });
 
 import { icon } from "../icon";
 
-
 function ListContract() {
   const { setListChat, user, refRight } = useContext(HomeContext);
   const [listonline, setListOnline] = useState([]);
@@ -26,16 +25,13 @@ function ListContract() {
       getData2("user", (e: any) => {
         setUsers(e || []);
       });
-    getData("useronline", (e: any) => {
-      setListOnline(e[0]?.online || []);
-    });
   }, [user]);
 
   useEffect(() => {
     socket.on("user status", (user) => {
       if (user.status == "online") {
         setListOnlineSocket(user.onlineUsers);
-        setListOnlineSocket((prevState) => {
+        setListOnlineSocket((prevState: any) => {
           if (prevState.includes(user.userId)) return prevState;
           return [...prevState, user.userId];
         });

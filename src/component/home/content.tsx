@@ -1123,7 +1123,7 @@ export default function HomeContent({
   useEffect(() => {
     getData("blog", (e: any) => {
       let arr: any = [...e].reverse();
-      setcounts.current = arr.length;
+      if (setcounts) setcounts.current = arr.length;
       setBlogs([...arr]);
     });
     getData(
@@ -1146,7 +1146,7 @@ export default function HomeContent({
       },
       where(documentId(), "==", "CGz3WFV4WK4cKndhHFSX")
     );
-  }, []);
+  }, [user]);
 
   const arrfilter = () => {
     return blogs?.filter((i: any) => {
