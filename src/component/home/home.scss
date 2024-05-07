@@ -412,6 +412,14 @@
   height: calc(100vh - 60px);
   color: white;
   .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    img {
+      display: none;
+      cursor: pointer;
+      width: 40px;
+    }
     margin-top: 20px;
     margin-bottom: 20px;
     color: rgb(202, 202, 202);
