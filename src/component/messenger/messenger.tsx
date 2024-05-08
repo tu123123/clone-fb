@@ -1,6 +1,11 @@
 "use client";
 import Image from "next/image";
-import { Avatar, CommentInput } from "../home/content";
+import {
+  Avatar,
+  CommentInput,
+  addNotifications,
+  getSrcFromFile,
+} from "../home/content";
 import "./messenger.scss";
 import { icon } from "../icon";
 import {
@@ -11,7 +16,13 @@ import {
   useRef,
   useState,
 } from "react";
-import { addData, getData, getData2, updateData } from "../firebase/config";
+import {
+  addData,
+  getData,
+  getData2,
+  imgDb,
+  updateData,
+} from "../firebase/config";
 import { and, documentId, where } from "firebase/firestore";
 import { HomeContext } from "@/app/page";
 import moment from "moment";
@@ -19,6 +30,7 @@ import { v4 } from "uuid";
 import Link from "next/link";
 import { Loading2 } from "../loading/loading";
 import { message } from "antd";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 
 const MessItem = ({
   value,
@@ -45,7 +57,10 @@ const MessItem = ({
         <Avatar img={value.imgURL}></Avatar>
       )}
       <div className="MessItem-content">
-        <p>{value.chat}</p>
+        {value.chat && <p>{value.chat}</p>}
+        {value.img && (
+          <img alt="" src={value.img} height={200} width={200}></img>
+        )}
         <div className="MessItem-content-time">
           {moment(value.time, "DD/MM/YYYY HH:mm").toNow()}
         </div>
@@ -56,18 +71,19 @@ const MessItem = ({
 const MessInput = ({ data, value }: { data: any; value: any }) => {
   const [text, setText] = useState<string>("");
   const { user } = useContext(HomeContext);
-  const onSend = (e?: any) => {
-    if (e) e.preventDefault();
-    if (text.trim() == "") return;
-    setText("");
+  let imgdel = useRef<any>("");
+  let img = useRef<any>("");
+  let imgfile = useRef<any>("");
+  const getupdate = (url = "") => {
     updateData(
       "messenger",
       data?.id,
       {
         chats: [
-          ...data.chats,
+          ...(data.chats || []),
           {
             ...user,
+            img: url,
             chat: text,
             idchat: v4(),
             time: moment().format("DD/MM/YYYY HH:mm"),
@@ -75,6 +91,12 @@ const MessInput = ({ data, value }: { data: any; value: any }) => {
         ],
       },
       () => {
+        addNotifications({
+          thongbao: text,
+          title: user.name + " đã gửi tin nhắn mới",
+          userid: user.name,
+          userget: value.id,
+        });
         getData2(
           "thongbaotinnhan",
           (e: any) => {
@@ -120,9 +142,56 @@ const MessInput = ({ data, value }: { data: any; value: any }) => {
       () => {}
     );
   };
+  const onSend = (e?: any) => {
+    if (e) e.preventDefault();
+    if (text.trim() == "" && imgfile.current == "") return;
+    setText("");
+    if (img.current && imgfile.current && imgdel.current) {
+      img.current.innerHTML = "";
+      imgdel.current.style.display = "none";
+    }
+    if (imgfile.current) {
+      let imgRef = ref(imgDb, "files/" + v4() + imgfile.current.data.name);
+      uploadBytes(imgRef, imgfile.current.data).then((res) => {
+        getDownloadURL(res.ref).then((url: string) => {
+          getupdate(url);
+          imgfile.current = "";
+        });
+      });
+    } else getupdate();
+  };
   return (
     <div className="MessInput">
+      <div className="img">
+        <div className="img-content">
+          <div className="onclose">
+            <img
+              ref={imgdel}
+              onClick={() => {
+                if (img.current && imgfile.current && imgdel.current) {
+                  imgfile.current = "";
+                  img.current.innerHTML = "";
+                  imgdel.current.style.display = "none";
+                }
+              }}
+              height={20}
+              src={icon.close.src}
+            ></img>
+          </div>
+          <div ref={img}></div>
+        </div>
+      </div>
       <textarea
+        onPaste={(e) => {
+          if (img && e.clipboardData.files[0]) {
+            imgdel.current.style.display = "revert";
+            img.current.innerHTML = e.clipboardData.getData("text/html");
+            let file: any = e.clipboardData.files[0];
+            getSrcFromFile(file).then((a: any) => {
+              imgfile.current = { src: a, uid: file.uid, data: file };
+            });
+          }
+        }}
         autoFocus
         onKeyPress={(e: any) => {
           if (e.key == "Enter" && e.shiftKey) return;
@@ -194,7 +263,7 @@ const Messenger = ({ value }: { value: any }) => {
     count.current = 2;
     return () => {};
   }, []);
-
+  const [counts, setCount] = useState(10);
   return (
     <div className="Messenger">
       <div className={`Messenger-header`}>
@@ -218,22 +287,36 @@ const Messenger = ({ value }: { value: any }) => {
         </div>
       </div>
       <div
+        onScroll={(e: any) => {
+          if (
+            e.target.scrollTop < 100 &&
+            e.target.scrollHeight > 500 &&
+            counts < chat?.chats.length
+          ) {
+            setCount(counts + 10);
+          }
+        }}
         ref={(e: HTMLDivElement) => {
           if (e) e.scrollTop = e.scrollHeight;
         }}
         className="Messenger-content"
       >
         {loading && <Loading2></Loading2>}
-        {chat?.chats?.map((i: { idchat: string }, index: number) => {
-          return (
-            <MessItem
-              key={i.idchat}
-              index={index}
-              list={chat?.chats}
-              value={i}
-            ></MessItem>
-          );
-        })}
+        {chat?.chats
+          ?.slice(
+            chat?.chats.length - counts >= 0 ? chat?.chats.length - counts : 0,
+            chat?.chats.length
+          )
+          .map((i: { idchat: string }, index: number) => {
+            return (
+              <MessItem
+                key={i.idchat}
+                index={index}
+                list={chat?.chats}
+                value={i}
+              ></MessItem>
+            );
+          })}
       </div>
       <div className="Messenger-footer">
         <MessInput value={value} data={chat}></MessInput>

@@ -77,18 +77,10 @@ export default function Header() {
     if (getUser()) {
       updateData(
         "user",
-        getUser().id,
-        { online: true },
-        () => {
-          getData2(
-            "user",
-            (e: any) => {
-              setUser(e[0]);
-            },
-            where(documentId(), "==", getUser()?.id)
-          );
+        (e: any) => {
+          setUser(e[0]);
         },
-        () => {}
+        where(documentId(), "==", getUser()?.id)
       );
       updateData(
         "useronline",
@@ -97,17 +89,17 @@ export default function Header() {
         () => {},
         () => {}
       );
-      getData("useronline", (e: any) => {
-        if (!e[0]?.online.find((i: string) => i == getUser().id)) {
-          updateData(
-            "useronline",
-            "oP9nStpYYKAwiDCcvBjT",
-            { online: [...e[0].online, getUser().id] },
-            () => {},
-            () => {}
-          );
-        }
-      });
+      // getData("useronline", (e: any) => {
+      //   if (!e[0]?.online.find((i: string) => i == getUser().id)) {
+      //     updateData(
+      //       "useronline",
+      //       "oP9nStpYYKAwiDCcvBjT",
+      //       { online: [...e[0].online, getUser().id] },
+      //       () => {},
+      //       () => {}
+      //     );
+      //   }
+      // });
       window.addEventListener("beforeunload", (ev) => {
         updateData(
           "user",

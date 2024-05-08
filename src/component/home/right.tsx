@@ -7,13 +7,17 @@ import { HomeContext } from "@/app/page";
 import { and, where } from "firebase/firestore";
 import Link from "next/link";
 import moment from "moment";
+
 import io from "socket.io-client";
 import { URL_SOCKET } from "@/app/constant";
 
 const socket = io(URL_SOCKET, { transports: ["websocket"] });
 
+import { icon } from "../icon";
+
+
 function ListContract() {
-  const { setListChat, user } = useContext(HomeContext);
+  const { setListChat, user, refRight } = useContext(HomeContext);
   const [listonline, setListOnline] = useState([]);
   const [listOnlineSocket, setListOnlineSocket] = useState([]);
   const [users, setUsers] = useState<any>();
@@ -53,8 +57,18 @@ function ListContract() {
   }, []);
 
   return (
-    <div className="ListContract">
-      <div className="header">Người liên hệ</div>
+    <div ref={refRight} className="ListContract">
+      <div className="header">
+        <div>Người liên hệ</div>
+        <img
+          onClick={() => {
+            if (refRight?.current) {
+              refRight.current.style.transform = "translateX(100vw)";
+            }
+          }}
+          src={icon.closewhite.src}
+        ></img>
+      </div>
       <div className="ListUser">
         {!users ? (
           <div
