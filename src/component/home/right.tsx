@@ -18,13 +18,16 @@ function ListContract() {
   const [listOnlineSocket, setListOnlineSocket] = useState([]);
   const [users, setUsers] = useState<any>();
   useEffect(() => {
-    if (user)
+    if (user) {
       getData2("user", (e: any) => {
         setUsers(e || []);
       });
-    getData("useronline", (e: any) => {
-      setListOnline(e[0]?.online || []);
-    });
+
+      socket.emit("new user", getUser().id);
+    }
+    // getData("useronline", (e: any) => {
+    //   setListOnline(e[0]?.online || []);
+    // });
   }, [user]);
 
   useEffect(() => {
