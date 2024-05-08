@@ -382,10 +382,14 @@ const CommentItem = ({
                   let indx = strArr.findIndex(
                     (i: any) => i.includes("http") && i.split(".").length > 1
                   );
+                  let href = strArr[indx];
                   strArr[
                     indx
-                  ] = `<a href='${strArr[indx]}'>${strArr[indx]}</a>`;
-                  e.innerHTML = `${value.name}<br>` + strArr.join(" ");
+                  ] = `<a target="_blank" href='${strArr[indx]}'>${strArr[indx]}</a>`;
+                  e.innerHTML =
+                    `${value.name}<br>` +
+                    strArr.join(" ") +
+                    `<iframe src="${href}" ></iframe>`;
                 }
               }}
             >
@@ -967,8 +971,18 @@ const Blog = ({ data }: any) => {
               let indx = strArr.findIndex(
                 (i: any) => i.includes("http") && i.split(".").length > 1
               );
-              strArr[indx] = `<a href='${strArr[indx]}'>${strArr[indx]}</a>`;
-              e.innerHTML = strArr.join(" ");
+              let href = strArr[indx];
+              if (href.includes("youtube") && href.includes("v=")) {
+                href = "https://www.youtube.com/embed/" + href.split("v=")[1];
+              } else href = "";
+              console.log(href);
+              strArr[
+                indx
+              ] = `<a target="_blank" href='${strArr[indx]}'>${strArr[indx]}</a>`;
+              e.innerHTML =
+                strArr.join(" ") +
+                (href &&
+                  `<br><iframe width="420" height="345" src="${href}" ></iframe>`);
             }
           }}
           className="blog-content-body"
