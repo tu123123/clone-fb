@@ -64,7 +64,6 @@
   padding-bottom: 20px;
 }
 .ListCard {
-  scroll-behavior: smooth;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -73,6 +72,7 @@
 
   position: relative;
   .listCard-content {
+    scroll-behavior: smooth;
     &::-webkit-scrollbar {
       display: none;
     }

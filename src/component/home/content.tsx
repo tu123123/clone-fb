@@ -101,7 +101,7 @@ const ListCard = () => {
       <div
         onClick={() => {
           el.current.container.scrollLeft =
-            el.current.container.scrollLeft - 40;
+            el.current.container.scrollLeft - 200;
           if (el.current.container.scrollLeft < 0)
             el.current.container.scrollLeft = 0;
         }}
@@ -118,7 +118,7 @@ const ListCard = () => {
         }}
         onClick={() => {
           el.current.container.scrollLeft =
-            el.current.container.scrollLeft + 40;
+            el.current.container.scrollLeft + 200;
           if (
             el.current.container.scrollLef >
             el.current.container.scrollWidth - el.current.container.offsetWidth
