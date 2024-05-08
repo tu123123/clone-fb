@@ -34,12 +34,13 @@ export const openNotification = (api: any, content = "") => ({
     }),
 });
 const LoginContext = createContext({});
-const notifiContext = createContext({});
+
 interface ModalType {
   title: string;
   children: ReactNode;
   groupButton?: ReactNode;
   onClose: () => void;
+  buttonClose?: ReactNode;
 }
 interface userType {
   name: string;
@@ -49,15 +50,23 @@ interface userType {
 interface LoginType {
   onClose: () => void;
 }
-export const Modal = ({ title, children, groupButton, onClose }: ModalType) => {
+export const Modal = ({
+  title,
+  children,
+  groupButton,
+  onClose,
+  buttonClose,
+}: ModalType) => {
   return createPortal(
     <div className="Modal">
       <div className="modal-form">
         <div className="modal-header">
           <div className="modal-title">{title}</div>
-          <div onClick={onClose} className="modal-close">
-            <img src={icon.close.src}></img>
-          </div>
+          {buttonClose || (
+            <div onClick={() => onClose()} className="modal-close">
+              <img src={icon.close.src}></img>
+            </div>
+          )}
         </div>
         <div className="modal-body">{children}</div>
 

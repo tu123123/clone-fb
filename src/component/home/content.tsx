@@ -37,13 +37,13 @@ const CommentContext = createContext<any>({});
 moment.locale("vi");
 
 const Card = ({ add = false, value }: any) => {
-  const [open, setopen] = useState(false);
+  const [open, setOpens] = useState(false);
   const { user } = useContext(HomeContext);
   return (
     <div
       onClick={() => {
         if (add) {
-          setopen(true);
+          setOpens(true);
         }
       }}
       style={{
@@ -51,7 +51,7 @@ const Card = ({ add = false, value }: any) => {
         backgroundImage: `url('${
           value?.img[0] ||
           (add
-            ? user?.imgURL ||
+            ? user?.background ||
               "https://images.fpt.shop/unsafe/filters:quality(90)/fptshop.com.vn/uploads/images/tin-tuc/169746/Originals/avatar-anime.jpg"
             : "")
         }')`,
@@ -73,6 +73,7 @@ const Card = ({ add = false, value }: any) => {
         style={{
           backgroundImage: `url('${
             value?.imgURL ||
+            user?.imgURL ||
             "https://images.fpt.shop/unsafe/filters:quality(90)/fptshop.com.vn/uploads/images/tin-tuc/169746/Originals/avatar-anime.jpg"
           }')`,
         }}
@@ -82,7 +83,7 @@ const Card = ({ add = false, value }: any) => {
       {open && (
         <ModalCreateBlog
           onClose={() => {
-            setopen(false);
+            setOpens(false);
           }}
           addstory={true}
         ></ModalCreateBlog>
@@ -92,6 +93,7 @@ const Card = ({ add = false, value }: any) => {
 };
 const ListCard = () => {
   const [list, setList] = useState([]);
+  const { user } = useContext(HomeContext);
   useEffect(() => {
     getData2("story", (e: any) => {
       setList(e);
@@ -161,7 +163,7 @@ const ListCard = () => {
         }}
         className="listCard-content"
       >
-        <Card add></Card>
+        {user && <Card add></Card>}
         {list?.map((i: any) => {
           return <Card key={i.id} value={i}></Card>;
         })}
@@ -189,6 +191,7 @@ export const Avatar = ({ img }: { img?: string }) => {
 interface ModalCreateBlogType {
   onClose: () => void;
   addstory?: boolean;
+  buttonClose?: ReactNode;
 }
 export const getSrcFromFile = (file: any) => {
   return new Promise((resolve) => {
@@ -199,6 +202,7 @@ export const getSrcFromFile = (file: any) => {
 };
 const ModalCreateBlog = ({
   onClose,
+  buttonClose,
   addstory = false,
 }: ModalCreateBlogType) => {
   const [upimg, setUpimg] = useState<any>([]);
@@ -212,6 +216,7 @@ const ModalCreateBlog = ({
   });
   return (
     <Modal
+      buttonClose={buttonClose}
       groupButton={
         <>
           <Button
@@ -252,7 +257,7 @@ const ModalCreateBlog = ({
         </>
       }
       title="Tạo nội dung"
-      onClose={onClose}
+      onClose={() => onClose()}
     >
       <div className="ModalCreateBlog">
         <p>Cảm nghĩ của bạn</p>
@@ -276,7 +281,7 @@ const ModalCreateBlog = ({
               style={{
                 width: "50px",
               }}
-              defaultValue={"black"}
+              defaultValue={"white"}
               onChange={(a, b) => {
                 status.background = b;
               }}
