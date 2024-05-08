@@ -312,7 +312,12 @@ const Messenger = ({ value }: { value: any }) => {
               <MessItem
                 key={i.idchat}
                 index={index}
-                list={chat?.chats}
+                list={chat?.chats?.slice(
+                  chat?.chats.length - counts >= 0
+                    ? chat?.chats.length - counts
+                    : 0,
+                  chat?.chats.length
+                )}
                 value={i}
               ></MessItem>
             );

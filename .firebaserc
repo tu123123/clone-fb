@@ -1,5 +1,8 @@
 {
   "projects": {
-    "default": "chatapp-e0650"
-  }
+    "default": "chatapp-e0650",
+    "staging": "fbclone-94701"
+  },
+  "targets": {},
+  "etags": {}
 }
