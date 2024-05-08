@@ -38,7 +38,7 @@ moment.locale("vi");
 
 const Card = ({ add = false, value }: any) => {
   const [open, setopen] = useState(false);
-
+  const { user } = useContext(HomeContext);
   return (
     <div
       onClick={() => {
@@ -51,7 +51,8 @@ const Card = ({ add = false, value }: any) => {
         backgroundImage: `url('${
           value?.img[0] ||
           (add
-            ? "https://images.fpt.shop/unsafe/filters:quality(90)/fptshop.com.vn/uploads/images/tin-tuc/169746/Originals/avatar-anime.jpg"
+            ? user?.imgURL ||
+              "https://images.fpt.shop/unsafe/filters:quality(90)/fptshop.com.vn/uploads/images/tin-tuc/169746/Originals/avatar-anime.jpg"
             : "")
         }')`,
       }}
