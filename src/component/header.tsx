@@ -75,9 +75,6 @@ export default function Header() {
       }
     });
     if (getUser()) {
-
-      updateData(
-      socket.emit("new user", getUser().id);
       getData2(
         "user",
         (e: any) => {

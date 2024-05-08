@@ -916,7 +916,10 @@ export const CommentInput = ({
               onPaste={(e) => {
                 if (img && e.clipboardData.files[0]) {
                   imgdel.current.style.display = "revert";
-                  img.current.innerHTML = e.clipboardData.getData("text/html");
+                  img.current.innerHTML = `<img src='${URL.createObjectURL(
+                    e.clipboardData.files[0]
+                  )}'/>`;
+
                   let file: any = e.clipboardData.files[0];
                   getSrcFromFile(file).then((a: any) => {
                     imgfile.current = { src: a, uid: file.uid, data: file };
