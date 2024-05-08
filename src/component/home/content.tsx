@@ -7,6 +7,7 @@ import React, {
   createContext,
   useRef,
   use,
+  useMemo,
 } from "react";
 import { icon } from "../icon";
 import "./home.scss";
@@ -35,7 +36,7 @@ import ReactionIcon from "../reactionIcon";
 const CommentContext = createContext<any>({});
 moment.locale("vi");
 
-const Card = () => {
+const Card = ({ add = false }) => {
   return (
     <div
       style={{
@@ -44,6 +45,7 @@ const Card = () => {
       }}
       className="Card"
     >
+      {add && <img src={icon.closewhite.src} height={50}></img>}
       <div
         style={{
           backgroundImage:
@@ -51,7 +53,7 @@ const Card = () => {
         }}
         className="Card-avatar"
       ></div>
-      <div className="Card-footer">sss</div>
+      <div className="Card-footer">Thêm mới</div>
     </div>
   );
 };
@@ -65,9 +67,7 @@ const ListCard = () => {
         <img src={icon.next.src}></img>
       </div>
       <div className="listCard-content">
-        <Card></Card>
-        <Card></Card>
-        <Card></Card>
+        <Card add></Card>
       </div>
     </div>
   );
@@ -383,13 +383,18 @@ const CommentItem = ({
                     (i: any) => i.includes("http") && i.split(".").length > 1
                   );
                   let href = strArr[indx];
+                  if (href.includes("youtube") && href.includes("v=")) {
+                    href =
+                      "https://www.youtube.com/embed/" + href.split("v=")[1];
+                  } else href = "";
                   strArr[
                     indx
                   ] = `<a target="_blank" href='${strArr[indx]}'>${strArr[indx]}</a>`;
                   e.innerHTML =
                     `${value.name}<br>` +
                     strArr.join(" ") +
-                    `<iframe src="${href}" ></iframe>`;
+                    (href &&
+                      `<iframe width="420" height="345" src="${href}" ></iframe>`);
                 }
               }}
             >
@@ -945,9 +950,8 @@ const Blog = ({ data }: any) => {
     );
   }, []);
   const [cmt, setCmt] = useState<boolean>(false);
-
-  return (
-    <div className="Blog">
+  const loadheader = useMemo(() => {
+    return (
       <div className="Blog-head">
         <div className="Blog-head-detail">
           <Avatar img={img}></Avatar>
@@ -959,6 +963,11 @@ const Blog = ({ data }: any) => {
           </div>
         </div>
       </div>
+    );
+  }, []);
+  return (
+    <div className="Blog">
+      {loadheader}
       <div className="Blog-content">
         <p
           ref={(e: any) => {
@@ -975,7 +984,7 @@ const Blog = ({ data }: any) => {
               if (href.includes("youtube") && href.includes("v=")) {
                 href = "https://www.youtube.com/embed/" + href.split("v=")[1];
               } else href = "";
-              console.log(href);
+
               strArr[
                 indx
               ] = `<a target="_blank" href='${strArr[indx]}'>${strArr[indx]}</a>`;

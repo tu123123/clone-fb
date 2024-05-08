@@ -1,7 +1,24 @@
 .Card {
   height: 250px;
   width: 170px;
+  position: relative;
   min-width: 170px;
+  &:hover {
+    img {
+      scale: 1.5;
+    }
+  }
+  img {
+    transition: 0.2s;
+    min-width: 50px;
+    background: rgba(128, 128, 128, 0.441);
+    top: 50%;
+    left: calc(50% - 30px);
+    border-radius: 50%;
+    transform: rotate(45deg);
+    max-width: 50px;
+    position: absolute;
+  }
   max-width: 170px;
   border-radius: 10px;
   background-size: cover;
@@ -550,4 +567,7 @@
     object-fit: cover !important;
     flex: 1;
   }
+}
+iframe {
+  max-width: 90vw !important;
 }
