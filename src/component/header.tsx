@@ -9,11 +9,7 @@ import Cookies from "js-cookie";
 import { Avatar, getUser } from "./home/content";
 import { getData, getData2, updateData } from "./firebase/config";
 import { documentId, where } from "firebase/firestore";
-import { io } from "socket.io-client";
-import { URL_SOCKET } from "@/app/constant";
 import moment from "moment";
-
-const socket = io(URL_SOCKET, { transports: ["websocket"] });
 
 const NotiItem = ({ value }: { value: any }) => {
   return (
@@ -79,6 +75,8 @@ export default function Header() {
       }
     });
     if (getUser()) {
+
+      updateData(
       socket.emit("new user", getUser().id);
       getData2(
         "user",
