@@ -36,8 +36,7 @@ import ReactionIcon from "../reactionIcon";
 const CommentContext = createContext<any>({});
 moment.locale("vi");
 
-const Card = ({ add = false, value }: any) => {
-  const [open, setOpens] = useState(false);
+const Card = ({ add = false, value, setOpens }: any) => {
   const { user } = useContext(HomeContext);
   return (
     <div
@@ -80,20 +79,13 @@ const Card = ({ add = false, value }: any) => {
         className="Card-avatar"
       ></div>
       <div className="Card-footer">{value?.name || "Thêm mới"}</div>
-      {open && (
-        <ModalCreateBlog
-          onClose={() => {
-            setOpens(false);
-          }}
-          addstory={true}
-        ></ModalCreateBlog>
-      )}
     </div>
   );
 };
 const ListCard = () => {
   const [list, setList] = useState([]);
   const { user } = useContext(HomeContext);
+  const [open, setOpens] = useState(false);
   useEffect(() => {
     getData2("story", (e: any) => {
       setList(e);
@@ -163,11 +155,19 @@ const ListCard = () => {
         }}
         className="listCard-content"
       >
-        {user && <Card add></Card>}
+        {user && <Card setOpens={setOpens} add></Card>}
         {list?.map((i: any) => {
           return <Card key={i.id} value={i}></Card>;
         })}
       </div>
+      {open && (
+        <ModalCreateBlog
+          onClose={() => {
+            setOpens(false);
+          }}
+          addstory={true}
+        ></ModalCreateBlog>
+      )}
     </div>
   );
 };
