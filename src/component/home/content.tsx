@@ -24,7 +24,7 @@ import {
   updateData,
   getData2,
 } from "../firebase/config";
-import { Button, Popover, Upload } from "antd";
+import { Button, ColorPicker, Popover, Upload } from "antd";
 import { HomeContext } from "@/app/page";
 import moment from "moment";
 import { count, documentId, where } from "firebase/firestore";
@@ -36,38 +36,134 @@ import ReactionIcon from "../reactionIcon";
 const CommentContext = createContext<any>({});
 moment.locale("vi");
 
-const Card = ({ add = false }) => {
+const Card = ({ add = false, value }: any) => {
+  const [open, setopen] = useState(false);
+
   return (
     <div
+      onClick={() => {
+        if (add) {
+          setopen(true);
+        }
+      }}
       style={{
-        backgroundImage:
-          'url("https://images.fpt.shop/unsafe/filters:quality(90)/fptshop.com.vn/uploads/images/tin-tuc/169746/Originals/avatar-anime.jpg")',
+        background: value?.background,
+        backgroundImage: `url('${
+          value?.img[0] ||
+          (add
+            ? "https://images.fpt.shop/unsafe/filters:quality(90)/fptshop.com.vn/uploads/images/tin-tuc/169746/Originals/avatar-anime.jpg"
+            : "")
+        }')`,
       }}
       className="Card"
     >
       {add && <img src={icon.closewhite.src} height={50}></img>}
+      {value?.content && (
+        <div
+          style={{
+            color: value?.color,
+          }}
+          className="contentstory"
+        >
+          {value?.content}
+        </div>
+      )}
       <div
         style={{
-          backgroundImage:
-            'url("https://images.fpt.shop/unsafe/filters:quality(90)/fptshop.com.vn/uploads/images/tin-tuc/169746/Originals/avatar-anime.jpg")',
+          backgroundImage: `url('${
+            value?.imgURL ||
+            "https://images.fpt.shop/unsafe/filters:quality(90)/fptshop.com.vn/uploads/images/tin-tuc/169746/Originals/avatar-anime.jpg"
+          }')`,
         }}
         className="Card-avatar"
       ></div>
-      <div className="Card-footer">Thêm mới</div>
+      <div className="Card-footer">{value?.name || "Thêm mới"}</div>
+      {open && (
+        <ModalCreateBlog
+          onClose={() => {
+            setopen(false);
+          }}
+          addstory={true}
+        ></ModalCreateBlog>
+      )}
     </div>
   );
 };
 const ListCard = () => {
+  const [list, setList] = useState([]);
+  useEffect(() => {
+    getData2("story", (e: any) => {
+      setList(e);
+    });
+  }, []);
+  const el = useRef<any>({
+    back: null,
+    next: null,
+    container: null,
+  });
   return (
     <div className="ListCard">
-      <div className="buttonlistCard back">
+      <div
+        onClick={() => {
+          el.current.container.scrollLeft =
+            el.current.container.scrollLeft - 40;
+          if (el.current.container.scrollLeft < 0)
+            el.current.container.scrollLeft = 0;
+        }}
+        ref={(e: any) => {
+          el.current.back = e;
+        }}
+        className="buttonlistCard back"
+      >
         <img src={icon.next.src}></img>
       </div>
-      <div className="buttonlistCard next">
+      <div
+        ref={(e: any) => {
+          el.current.next = e;
+        }}
+        onClick={() => {
+          el.current.container.scrollLeft =
+            el.current.container.scrollLeft + 40;
+          if (
+            el.current.container.scrollLef >
+            el.current.container.scrollWidth - el.current.container.offsetWidth
+          )
+            el.current.container.scrollLeft =
+              el.current.container.scrollWidth -
+              el.current.container.offsetWidth;
+        }}
+        className="buttonlistCard next"
+      >
         <img src={icon.next.src}></img>
       </div>
-      <div className="listCard-content">
+      <div
+        ref={(e: any) => {
+          el.current.container = e;
+          if (e && e.scrollLeft < e.scrollWidth - e.offsetWidth) {
+            el.current.next.style.display = "flex";
+          }
+        }}
+        onScroll={(e: any) => {
+          if (e.target.scrollLeft > 0) {
+            el.current.back.style.display = "flex";
+          } else {
+            el.current.back.style.display = "none";
+          }
+          if (
+            e.target.scrollLeft <
+            e.target.scrollWidth - e.target.offsetWidth
+          ) {
+            el.current.next.style.display = "flex";
+          } else {
+            el.current.next.style.display = "none";
+          }
+        }}
+        className="listCard-content"
+      >
         <Card add></Card>
+        {list?.map((i: any) => {
+          return <Card key={i.id} value={i}></Card>;
+        })}
       </div>
     </div>
   );
@@ -91,6 +187,7 @@ export const Avatar = ({ img }: { img?: string }) => {
 };
 interface ModalCreateBlogType {
   onClose: () => void;
+  addstory?: boolean;
 }
 export const getSrcFromFile = (file: any) => {
   return new Promise((resolve) => {
@@ -99,15 +196,18 @@ export const getSrcFromFile = (file: any) => {
     reader.onload = () => resolve(reader.result);
   });
 };
-const ModalCreateBlog = ({ onClose }: ModalCreateBlogType) => {
+const ModalCreateBlog = ({
+  onClose,
+  addstory = false,
+}: ModalCreateBlogType) => {
   const [upimg, setUpimg] = useState<any>([]);
-  const { setLoading } = useContext(HomeContext);
+  const { setLoading, user } = useContext(HomeContext);
   const { setLoadinghome } = useContext(UserContext);
 
   const [status] = useState<any>({
     content: "",
     img: [],
-    ...getUser(),
+    ...(user || getUser()),
   });
   return (
     <Modal
@@ -120,7 +220,7 @@ const ModalCreateBlog = ({ onClose }: ModalCreateBlogType) => {
               const loopUpdate = (data = upimg, index = 0) => {
                 if (!data[index])
                   return addData(
-                    "blog",
+                    addstory ? "story" : "blog",
                     { ...status, time: moment().format("MM/DD/YYYY HH:mm") },
                     () => {
                       if (setLoading) setLoading(false);
@@ -158,6 +258,30 @@ const ModalCreateBlog = ({ onClose }: ModalCreateBlogType) => {
         <TextArea
           onChange={(e: any) => (status.content = e.target.value)}
         ></TextArea>
+        {addstory && (
+          <>
+            <p>Màu chữ</p>
+            <ColorPicker
+              style={{
+                width: "50px",
+              }}
+              defaultValue={"black"}
+              onChange={(a, b) => {
+                status.color = b;
+              }}
+            ></ColorPicker>
+            <p>Background</p>
+            <ColorPicker
+              style={{
+                width: "50px",
+              }}
+              defaultValue={"black"}
+              onChange={(a, b) => {
+                status.background = b;
+              }}
+            ></ColorPicker>
+          </>
+        )}
         <ImgCrop
           onModalOk={(e: any) => {
             getSrcFromFile(e).then((a: any) => {
