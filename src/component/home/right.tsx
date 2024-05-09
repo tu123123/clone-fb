@@ -55,8 +55,8 @@ function ListContract() {
       if (reason === "io server disconnect") {
         socket.connect();
       }
-    }})
-    
+    });
+
     return () => {
       socket.off("user status");
     };
