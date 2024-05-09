@@ -484,6 +484,45 @@ const CommentItem = ({
       where(documentId(), "==", value?.id)
     );
   }, []);
+  const renderComen = useMemo(() => {
+    return (
+      <p
+        ref={(e: HTMLParagraphElement) => {
+          refele.current = e;
+          if (onRef) {
+            onRef(e);
+          }
+          if (
+            e &&
+            value.comment.includes("http") &&
+            value.comment.trim().split(".").length > 1
+          ) {
+            let strArr = value.comment.split(" ");
+            let indx = strArr.findIndex(
+              (i: any) => i.includes("http") && i.split(".").length > 1
+            );
+            let href = strArr[indx];
+            if (href.includes("youtube") && href.includes("v=")) {
+              href = "https://www.youtube.com/embed/" + href.split("v=")[1];
+            } else href = "";
+            strArr[
+              indx
+            ] = `<a target="_blank" href='${strArr[indx]}'>${strArr[indx]}</a>`;
+            e.innerHTML =
+              `${value.name}<br>` +
+              strArr.join(" ") +
+              (href &&
+                `<iframe width="420" height="345" src="${href}" ></iframe>`);
+          }
+        }}
+      >
+        {value.name}
+        <br></br>
+
+        {value.comment}
+      </p>
+    );
+  }, []);
   return (
     <div className={`CommentItem `}>
       {rep && repcomment && (
@@ -501,42 +540,7 @@ const CommentItem = ({
         <Avatar img={img}></Avatar>
         <div className="comment-container">
           <div className="CommentItem-content">
-            <p
-              ref={(e: HTMLParagraphElement) => {
-                refele.current = e;
-                if (onRef) {
-                  onRef(e);
-                }
-                if (
-                  e &&
-                  value.comment.includes("http") &&
-                  value.comment.trim().split(".").length > 1
-                ) {
-                  let strArr = value.comment.split(" ");
-                  let indx = strArr.findIndex(
-                    (i: any) => i.includes("http") && i.split(".").length > 1
-                  );
-                  let href = strArr[indx];
-                  if (href.includes("youtube") && href.includes("v=")) {
-                    href =
-                      "https://www.youtube.com/embed/" + href.split("v=")[1];
-                  } else href = "";
-                  strArr[
-                    indx
-                  ] = `<a target="_blank" href='${strArr[indx]}'>${strArr[indx]}</a>`;
-                  e.innerHTML =
-                    `${value.name}<br>` +
-                    strArr.join(" ") +
-                    (href &&
-                      `<iframe width="420" height="345" src="${href}" ></iframe>`);
-                }
-              }}
-            >
-              {value.name}
-              <br></br>
-
-              {value.comment}
-            </p>
+            {renderComen}
             {value.img && (
               <div>
                 <img
@@ -1102,9 +1106,8 @@ const Blog = ({ data }: any) => {
       </div>
     );
   }, [img]);
-  return (
-    <div className="Blog">
-      {loadheader}
+  const blogrender = useMemo(() => {
+    return (
       <div className="Blog-content">
         <p
           ref={(e: any) => {
@@ -1141,6 +1144,12 @@ const Blog = ({ data }: any) => {
           })}
         </div>
       </div>
+    );
+  }, []);
+  return (
+    <div className="Blog">
+      {loadheader}
+      {blogrender}
       <div className="Blog-footer">
         <div className="Blog-footer-left">
           <div className="reaction-container">
