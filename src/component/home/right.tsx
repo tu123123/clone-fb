@@ -50,6 +50,13 @@ function ListContract() {
         });
       }
     });
+
+    socket.on("disconnect", (reason) => {
+      if (reason === "io server disconnect") {
+        socket.connect();
+      }
+    }})
+    
     return () => {
       socket.off("user status");
     };
