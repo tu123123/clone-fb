@@ -27,7 +27,7 @@ import {
 import { Button, ColorPicker, Popover, Upload } from "antd";
 import { HomeContext } from "@/app/page";
 import moment from "moment";
-import { count, documentId, where } from "firebase/firestore";
+import { count, documentId, orderBy, where } from "firebase/firestore";
 import addNotification from "react-push-notification";
 import { title } from "process";
 import { UserContext } from "@/app/[myid]/page";
@@ -72,7 +72,7 @@ const Card = ({ add = false, value, setOpens }: any) => {
         style={{
           backgroundImage: `url('${
             value?.imgURL ||
-            user?.imgURL ||
+            (add && user?.imgURL) ||
             "https://images.fpt.shop/unsafe/filters:quality(90)/fptshop.com.vn/uploads/images/tin-tuc/169746/Originals/avatar-anime.jpg"
           }')`,
         }}
@@ -87,9 +87,13 @@ const ListCard = () => {
   const { user } = useContext(HomeContext);
   const [open, setOpens] = useState(false);
   useEffect(() => {
-    getData2("story", (e: any) => {
-      setList(e);
-    });
+    getData2(
+      "story",
+      (e: any) => {
+        setList(e.reverse());
+      },
+      orderBy("time", "asc")
+    );
   }, []);
   const el = useRef<any>({
     back: null,
@@ -1097,7 +1101,7 @@ const Blog = ({ data }: any) => {
         </div>
       </div>
     );
-  }, []);
+  }, [img]);
   return (
     <div className="Blog">
       {loadheader}
