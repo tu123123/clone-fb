@@ -237,6 +237,14 @@
       align-items: center;
       gap: 2px;
     }
+
+    .Blog-reaction-count {
+      cursor: pointer;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
   }
   .blog-button {
     position: relative;
