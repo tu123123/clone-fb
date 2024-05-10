@@ -402,6 +402,7 @@ const CommentItem = ({
 
   const renderReactionArray = [
     {
+      id: "likes",
       data: value.likes,
       render: (
         <>
@@ -417,6 +418,7 @@ const CommentItem = ({
       ),
     },
     {
+      id: "love",
       data: value.love,
       render: (
         <>
@@ -426,6 +428,7 @@ const CommentItem = ({
       img: <img width={20} style={{ height: 20 }} src={icon.love.src}></img>,
     },
     {
+      id: "care",
       data: value.care,
       render: (
         <>
@@ -435,6 +438,7 @@ const CommentItem = ({
       img: <img width={20} style={{ height: 20 }} src={icon.care.src}></img>,
     },
     {
+      id: "haha",
       data: value.haha,
       render: (
         <>
@@ -445,6 +449,7 @@ const CommentItem = ({
       img: <img width={20} style={{ height: 20 }} src={icon.haha.src}></img>,
     },
     {
+      id: "wow",
       data: value.wow,
       render: (
         <>
@@ -455,6 +460,7 @@ const CommentItem = ({
       img: <img width={20} style={{ height: 20 }} src={icon.wow.src}></img>,
     },
     {
+      id: "sad",
       data: value.sad,
       render: (
         <>
@@ -465,6 +471,7 @@ const CommentItem = ({
       img: <img width={20} style={{ height: 20 }} src={icon.sad.src}></img>,
     },
     {
+      id: "angry",
       data: value.angry,
       render: (
         <>
@@ -474,6 +481,31 @@ const CommentItem = ({
       img: <img width={20} style={{ height: 20 }} src={icon.angry.src}></img>,
     },
   ];
+
+  const renderReaction = () => {
+    const mostReactIcon = renderReactionArray
+      .filter((x) => x.data && x.data.length > 0)
+      .sort((a, b) => b.data.length - a.data.length)
+      .slice(0, 2);
+
+    const thisUserReaction = renderReactionArray.find(
+      (item) => item.data && item.data.find((x: any) => x == getUser()?.id)
+    );
+
+    return (
+      <>
+        {mostReactIcon.map((item) => (
+          <div key={item.id}>{item.img}</div>
+        ))}
+        {thisUserReaction &&
+        !mostReactIcon.find((item) => item.id == thisUserReaction?.id) ? (
+          <div key={thisUserReaction?.id}>{thisUserReaction?.img}</div>
+        ) : (
+          <></>
+        )}
+      </>
+    );
+  };
 
   useEffect(() => {
     getData2(
@@ -731,13 +763,7 @@ const CommentItem = ({
                   >
                     <div className="CommnetItem-contain">
                       <div>{countReaction(value)}</div>
-                      {renderReactionArray
-                        .filter((x) => x.data && x.data.length > 0)
-                        .sort((a, b) => b.data.length - a.data.length)
-                        .slice(0, 2)
-                        .map((item, index) => (
-                          <div key={index}>{item.img}</div>
-                        ))}
+                      {renderReaction()}
                     </div>
                   </Popover>
                 </div>
@@ -1081,6 +1107,94 @@ const Blog = ({ data }: any) => {
     },
   ];
 
+  const renderReaction = () => {
+    const mostReactIcon = renderReactionArray
+      .filter((x) => x.data && x.data.length > 0)
+      .sort((a, b) => b.data.length - a.data.length)
+      .slice(0, 2);
+
+    const thisUserReaction = renderReactionArray.find(
+      (item) => item.data && item.data.find((x: any) => x == getUser()?.id)
+    );
+
+    return (
+      <>
+        {mostReactIcon.map((item) => (
+          <Popover
+            arrow={false}
+            placement="bottom"
+            title={item.title}
+            content={
+              <div>
+                {(item.data || [])
+                  .slice(0, 20)
+                  .map((content: any, cIndex: number) => {
+                    return (
+                      <div key={cIndex}>
+                        {listUser?.find((x: any) => x.id == content)?.name}
+                      </div>
+                    );
+                  })}
+                {item.data.length > 20 && <div>...</div>}
+              </div>
+            }
+            key={item.title}
+          >
+            {item.img}
+          </Popover>
+        ))}
+        {thisUserReaction &&
+        !mostReactIcon.find((item) => item.title == thisUserReaction.title) ? (
+          <Popover
+            arrow={false}
+            placement="bottom"
+            title={thisUserReaction.title}
+            content={
+              <div>
+                {(thisUserReaction.data || [])
+                  .slice(0, 20)
+                  .map((content: any, cIndex: number) => {
+                    return (
+                      <div key={cIndex}>
+                        {listUser?.find((x: any) => x.id == content)?.name}
+                      </div>
+                    );
+                  })}
+                {thisUserReaction.data.length > 20 && <div>...</div>}
+              </div>
+            }
+            key={thisUserReaction.title}
+          >
+            {thisUserReaction.img}
+          </Popover>
+        ) : (
+          <></>
+        )}
+      </>
+    );
+  };
+
+  const renderListUserReaction = () => {
+    const listUserReaction = renderReactionArray
+      .filter((item) => item.data && item.data.length > 0)
+      .map((i) => i.data)
+      .flat();
+    return (
+      <div>
+        {(listUserReaction || [])
+          .slice(0, 20)
+          .map((content: any, cIndex: number) => {
+            return (
+              <div key={cIndex}>
+                {listUser?.find((x: any) => x.id == content)?.name}
+              </div>
+            );
+          })}
+        {listUserReaction.length > 20 && <div>...</div>}
+      </div>
+    );
+  };
+
   useEffect(() => {
     getData2(
       "user",
@@ -1152,40 +1266,16 @@ const Blog = ({ data }: any) => {
       {blogrender}
       <div className="Blog-footer">
         <div className="Blog-footer-left">
-          <div className="reaction-container">
-            {renderReactionArray
-              .filter((x) => x.data && x.data.length > 0)
-              .sort((a, b) => b.data.length - a.data.length)
-              .slice(0, 2)
-              .map((item, index) => (
-                <Popover
-                  arrow={false}
-                  placement="bottom"
-                  title={item.title}
-                  content={
-                    <div>
-                      {(item.data || [])
-                        .slice(0, 20)
-                        .map((content: any, cIndex: number) => {
-                          return (
-                            <div key={cIndex}>
-                              {
-                                listUser?.find((x: any) => x.id == content)
-                                  ?.name
-                              }
-                            </div>
-                          );
-                        })}
-                      {item.data.length > 20 && <div>...</div>}
-                    </div>
-                  }
-                  key={index}
-                >
-                  {item.img}
-                </Popover>
-              ))}
-          </div>
-          <div>{countReaction(data) || ""} </div>
+          <div className="reaction-container">{renderReaction()}</div>
+          <Popover
+            arrow={false}
+            placement="bottom"
+            content={renderListUserReaction}
+          >
+            <div className="Blog-reaction-count">
+              {countReaction(data) || ""}{" "}
+            </div>
+          </Popover>
         </div>
         <div onClick={() => setCmt(true)} className="Blog-footer-right">
           {countCmt(data)} Bình luận

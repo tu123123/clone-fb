@@ -59,6 +59,7 @@ function ListContract() {
 
     return () => {
       socket.off("user status");
+      socket.off("disconnect");
     };
   }, []);
 
