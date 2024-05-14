@@ -51,6 +51,12 @@ function ListContract() {
       }
     });
 
+    socket.on("connect", () => {
+      if (user && getUser() && !listOnlineSocket.includes(getUser().id)) {
+        socket.emit("new user", getUser().id);
+      }
+    });
+
     socket.on("disconnect", (reason) => {
       if (reason === "io server disconnect") {
         socket.connect();
@@ -58,6 +64,7 @@ function ListContract() {
     });
 
     return () => {
+      socket.off("connect");
       socket.off("user status");
       socket.off("disconnect");
     };
