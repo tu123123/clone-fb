@@ -37,10 +37,10 @@ function ListContract() {
     socket.on("user status", (user) => {
       if (user.status == "online") {
         setListOnlineSocket(user.onlineUsers);
-        setListOnlineSocket((prevState: any) => {
-          if (prevState.includes(user.userId)) return prevState;
-          return [...prevState, user.userId];
-        });
+        // setListOnlineSocket((prevState: any) => {
+        //   if (prevState.includes(user.userId)) return prevState;
+        //   return [...prevState, user.userId];
+        // });
       } else if (user.status == "offline") {
         setListOnlineSocket((prevState) => {
           let index = prevState.findIndex((item) => item == user.userId);
