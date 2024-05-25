@@ -592,7 +592,9 @@
   display: flex;
   img {
     object-fit: cover !important;
-    flex: 1;
+    // flex: 1;
+    width: min-content;
+    max-width: 100%;
   }
 }
 iframe {
