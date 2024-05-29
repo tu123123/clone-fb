@@ -239,7 +239,7 @@ const ModalCreateBlog = ({
                     }
                   );
                 let i = data[index];
-                let imgRef = ref(imgDb, "files/" + i.data.name);
+                let imgRef = ref(imgDb, "files/" + v4() + i.data.name);
                 uploadBytes(imgRef, i.data).then((value) => {
                   getDownloadURL(value.ref).then((url: string) => {
                     status.img.push(url);
