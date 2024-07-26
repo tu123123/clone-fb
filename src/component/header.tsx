@@ -117,6 +117,11 @@ export default function Header() {
                 <img src={icon.home.src}></img>Home
               </div>
             </Link>
+            <Link href={"/language"}>
+              <div className="LeftContent-item">
+                <img src={icon.language.src}></img> <p>日本語</p>
+              </div>
+            </Link>
             <div className="bottion-icon">
               {" "}
               <img src={icon.group.src}></img>Group
