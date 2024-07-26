@@ -187,12 +187,12 @@ const FlashCard = ({ open, onclose }: { onclose: any; open: any }) => {
               setopenmota({ ...openmota, hiragana: !openmota.hiragana })
             }
           >
-            Xem hiragana
+            hiragana
           </Button>
           <Button
             onClick={() => setopenmota({ ...openmota, nghia: !openmota.nghia })}
           >
-            Xem nghĩa
+            nghĩa
           </Button>
           <div>
             {data[open.type].length}/{index + 1}

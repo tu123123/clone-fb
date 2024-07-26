@@ -119,7 +119,7 @@ export default function Header() {
             </Link>
             <Link href={"/language"}>
               <div className="LeftContent-item">
-                <img src={icon.language.src}></img> <p>日本語</p>
+                <img height={20} src={icon.language.src}></img> <p>日本語</p>
               </div>
             </Link>
             <div className="bottion-icon">
