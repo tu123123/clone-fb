@@ -18,12 +18,15 @@ import loading from "./assets/loading.svg";
 import closewhite from "./assets/closewhite.svg";
 import close from "./assets/close.svg";
 import send from "./assets/send.svg";
+import language from "./assets/language.svg";
 import camera from "./assets/camera.svg";
 import angry from "./assets/angry.svg";
 import care from "./assets/care.svg";
 import likeReaction from "./assets/like_reaction.svg";
 import love from "./assets/love.svg";
+import test from "./assets/test.svg";
 import sad from "./assets/sad.svg";
+import add from "./assets/add.svg";
 import wow from "./assets/wow.svg";
 import haha from "./assets/haha.svg";
 import likeblue from "./assets/likeblue.svg";
@@ -31,11 +34,14 @@ export const icon = {
   likeblue,
   haha,
   angry,
+  language,
   care,
+  test,
   likeReaction,
   love,
   sad,
   wow,
+  add,
   bell: bell,
   menu: menu,
   camera: camera,

@@ -1,0 +1,135 @@
+.Language {
+  width: 100vw;
+  height: calc(100vh - 60px);
+  overflow: auto;
+  margin: 0 auto;
+  padding: 10px;
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  .Language-group {
+    width: 800px;
+
+    margin-top: 10px;
+    background: rgb(131, 131, 131);
+    max-width: 100%;
+    padding: 10px;
+    border-radius: 15px;
+    .g-title {
+      font-size: 20px;
+      font-weight: bold;
+      color: rgb(255, 255, 255);
+    }
+    ul {
+      span {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        img {
+          cursor: pointer;
+          border: 2px solid rgb(7, 7, 7);
+          height: 25px;
+          &:hover {
+            background: rgb(154, 154, 154);
+          }
+          border-radius: 50%;
+        }
+      }
+    }
+    li {
+      background: rgb(94, 94, 94);
+      width: fit-content;
+      cursor: pointer;
+      padding: 5px 20px;
+      color: rgb(211, 211, 211);
+      transition: 0.3s;
+      margin-top: 5px;
+      &:hover {
+        background: rgb(154, 154, 154);
+      }
+      margin-left: 20px;
+      border-radius: 15px;
+      list-style: circle !important;
+    }
+  }
+}
+.ModalContent {
+  padding: 10px;
+  width: 800px;
+  max-width: 95%;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.tuvung-item {
+  p {
+    font-size: 25px;
+    font-weight: 400;
+  }
+  background-color: rgb(200, 208, 233);
+  width: fit-content;
+  padding: 10px;
+  li {
+    color: rgb(49, 48, 48);
+    font-size: 15px;
+  }
+  border-radius: 15px;
+}
+.ModaladdContent {
+  padding: 10px;
+  width: 800px;
+  max-width: 95%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.langageTitle {
+  color: white;
+  font-weight: bold;
+  font-size: 30px;
+}
+.addinput {
+  textarea {
+    width: 100%;
+    font-size: 15px;
+    padding: 5px;
+    outline: none;
+    resize: none;
+    border-radius: 5px;
+    background: rgb(215, 215, 215);
+  }
+}
+.Flashcard {
+  font-size: 40px;
+  background: rgb(171, 221, 255);
+  width: fit-content;
+  padding: 10px;
+  margin: 0 auto;
+  border-radius: 10px;
+}
+.mota {
+  padding: 5px;
+  display: flex;
+  gap: 5px;
+}
+.nguphap-item {
+  width: 100% !important;
+
+  background-color: rgb(200, 208, 233);
+  padding: 10px;
+  ul {
+    transition: 0.5s;
+    overflow: hidden;
+    height: 0px;
+  }
+  cursor: pointer;
+  border-radius: 10px;
+  div {
+    white-space: pre-line;
+  }
+  p {
+    font-size: 25px;
+    font-weight: 400;
+  }
+}
