@@ -8,6 +8,8 @@ import { Button, Input } from "antd";
 import { v4 } from "uuid";
 import { button } from "@/component/button/button";
 import Loading from "@/component/loading/loading";
+import { file } from "./file";
+import DocViewer from "react-doc-viewer";
 const languageContext = createContext<any>({});
 const ModalContent = ({ open, onclose }: { open: any; onclose: any }) => {
   const { data, setLd } = useContext(languageContext);
@@ -253,6 +255,7 @@ export default function Language() {
       setData(e[0]);
     });
   }, []);
+
   return (
     <languageContext.Provider value={{ data: data, setLd }}>
       {opentest.open && (
@@ -278,7 +281,53 @@ export default function Language() {
         )}
         <div className="langageTitle">一緒に日本語を学びましょう</div>
         <div className="Language-group">
-          <div className="g-title">Cấp độ N3</div>
+          <div
+            // onClick={() => {
+            //   let files = file.split("(");
+            //   let kanji = [];
+            //   let fail = [];
+            //   let fai2l = [];
+            //   let index = 0;
+            //   files.forEach((i) => {
+            //     index++;
+            //     let item = "";
+            //     let item2 = "";
+            //     let item3 = "";
+            //     let ii = i.split(" ");
+            //     let ii2 = files[index <= files.length ? index : 0]?.split(" ");
+            //     if (ii2 && ii2.length > 2) {
+            //       let hina = ii2[0].split(")");
+
+            //       item = ii2.splice(1, ii2.length - 2).join(" ");
+
+            //       if (hina.length > 1) {
+            //         item2 = hina[0];
+            //         item3 = hina[1];
+            //       }
+            //     } else fail.push(ii2);
+            //     if (ii2)
+            //       kanji.push({
+            //         value: ii[ii.length - 1] + item3,
+            //         hiragana: ii2 && ii2[0].replace(")", ""),
+            //         nghia: item,
+            //       });
+            //   });
+            //   updateData(
+            //     "language",
+            //     "T25lMOEuJ1MtlCmeC5yU",
+            //     {
+            //       kanji: data[open.type]
+            //         ? [...data[open.type], ...kanji]
+            //         : [...kanji],
+            //     },
+            //     () => {},
+            //     (e: any) => {}
+            //   );
+            // }}
+            className="g-title"
+          >
+            Cấp độ N3
+          </div>
           <ul>
             <span>
               <li
