@@ -13,16 +13,37 @@ import DocViewer from "react-doc-viewer";
 const languageContext = createContext<any>({});
 const ModalContent = ({ open, onclose }: { open: any; onclose: any }) => {
   const { data, setLd } = useContext(languageContext);
-
+  const [anhien, setAnhien] = useState({
+    hiragana: false,
+    nghia: false,
+  });
   return (
-    <Modal onClose={onclose} title={open.title}>
+    <Modal
+      groupButton={
+        <>
+          <div
+            onClick={() => setAnhien({ ...anhien, hiragana: !anhien.hiragana })}
+            className={anhien.hiragana ? "buttonlgon" : "buttonlg"}
+          >
+            Hiragana
+          </div>
+          <div
+            onClick={() => setAnhien({ ...anhien, nghia: !anhien.nghia })}
+            className={anhien.nghia ? "buttonlgon" : "buttonlg"}
+          >
+            Nghĩa
+          </div>
+        </>
+      }
+      onClose={onclose}
+      title={open.title}
+    >
       <div className="ModalContent">
-        {data[open.type]?.map((i: any) => {
+        {data[open.type]?.map((i: any, index: number) => {
           let clickitem: any = null;
           return open.type == "nguphap" ? (
             <div
               onClick={() => {
-                console.log(clickitem.scrollHeight);
                 if (clickitem) {
                   if (clickitem.offsetHeight <= 0)
                     clickitem.style.height = clickitem.scrollHeight + "px";
@@ -51,10 +72,23 @@ const ModalContent = ({ open, onclose }: { open: any; onclose: any }) => {
             </div>
           ) : (
             <div className="tuvung-item">
+              {index + 1}
               <p>{i.value}</p>
               <ul>
-                <li>Hiragana: {i.hiragana}</li>
-                <li>Nghĩa: {i.nghia}</li>
+                <li
+                  style={{
+                    opacity: !anhien.hiragana && "0",
+                  }}
+                >
+                  Hiragana: {i.hiragana}
+                </li>
+                <li
+                  style={{
+                    opacity: !anhien.nghia && "0",
+                  }}
+                >
+                  Nghĩa: {i.nghia}
+                </li>
               </ul>
             </div>
           );

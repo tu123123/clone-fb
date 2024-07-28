@@ -129,7 +129,21 @@
     white-space: pre-line;
   }
   p {
-    font-size: 25px;
+    font-size: 20px;
     font-weight: 400;
   }
+}
+.buttonlg {
+  background: gray;
+  color: white;
+  padding: 5px 10px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+.buttonlgon {
+  background: rgb(48, 128, 255);
+  color: white;
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
 }
