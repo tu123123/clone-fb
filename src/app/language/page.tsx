@@ -8,7 +8,7 @@ import { Button, Input } from "antd";
 import { v4 } from "uuid";
 import { button } from "@/component/button/button";
 import Loading from "@/component/loading/loading";
-import { file } from "./file";
+import { file, kanjibasic } from "./file";
 import DocViewer from "react-doc-viewer";
 const languageContext = createContext<any>({});
 const ModalContent = ({ open, onclose }: { open: any; onclose: any }) => {
@@ -17,6 +17,7 @@ const ModalContent = ({ open, onclose }: { open: any; onclose: any }) => {
     hiragana: false,
     nghia: false,
   });
+
   return (
     <Modal
       groupButton={
@@ -39,60 +40,77 @@ const ModalContent = ({ open, onclose }: { open: any; onclose: any }) => {
       title={open.title}
     >
       <div className="ModalContent">
-        {data[open.type]?.map((i: any, index: number) => {
-          let clickitem: any = null;
-          return open.type == "nguphap" ? (
-            <div
-              onClick={() => {
-                if (clickitem) {
-                  if (clickitem.offsetHeight <= 0)
-                    clickitem.style.height = clickitem.scrollHeight + "px";
-                  else clickitem.style.height = "0px";
-                }
-              }}
-              className="nguphap-item"
-            >
-              <p>{i.name}</p>
-              <ul
-                ref={(e: any) => {
-                  clickitem = e;
-                }}
-              >
-                <li>Công thức: {i.value}</li>
-                <li>Diễn giải: </li>
-                <div>{i.mota}</div>
-              </ul>
-            </div>
-          ) : open.type == "tuvung" ? (
-            <div className="tuvung-item">
-              <p>{i.value}</p>
-              <ul>
-                <li>Nghĩa: {i.nghia}</li>
-              </ul>
-            </div>
-          ) : (
-            <div className="tuvung-item">
-              {index + 1}
-              <p>{i.value}</p>
-              <ul>
-                <li
-                  style={{
-                    opacity: !anhien.hiragana && "0",
+        {open.type == "bothu"
+          ? kanjibasic.map((i, index) => {
+              return (
+                <div className="tuvung-item">
+                  {index + 1}
+                  <p>{i.kanji}</p>
+                  <ul
+                    style={{
+                      opacity: !anhien.nghia && "0",
+                    }}
+                  >
+                    <li>Âm hán: {i.amhan}</li>
+                    <li>Nghĩa: {i.nghia}</li>
+                  </ul>
+                </div>
+              );
+            })
+          : data[open.type]?.map((i: any, index: number) => {
+              let clickitem: any = null;
+              return open.type == "nguphap" ? (
+                <div
+                  onClick={() => {
+                    if (clickitem) {
+                      if (clickitem.offsetHeight <= 0)
+                        clickitem.style.height = clickitem.scrollHeight + "px";
+                      else clickitem.style.height = "0px";
+                    }
                   }}
+                  className="nguphap-item"
                 >
-                  Hiragana: {i.hiragana}
-                </li>
-                <li
-                  style={{
-                    opacity: !anhien.nghia && "0",
-                  }}
-                >
-                  Nghĩa: {i.nghia}
-                </li>
-              </ul>
-            </div>
-          );
-        })}
+                  <p>{i.name}</p>
+                  <ul
+                    ref={(e: any) => {
+                      clickitem = e;
+                    }}
+                  >
+                    <li>Công thức: {i.value}</li>
+                    <li>Diễn giải: </li>
+                    <div>{i.mota}</div>
+                  </ul>
+                </div>
+              ) : open.type == "tuvung" ? (
+                <div className="tuvung-item">
+                  <p>{i.value}</p>
+                  <ul>
+                    <li>Nghĩa: {i.nghia}</li>
+                  </ul>
+                </div>
+              ) : (
+                <div className="tuvung-item">
+                  {index + 1}
+                  <p>{i.value}</p>
+                  <ul>
+                    <li
+                      style={{
+                        opacity: !anhien.hiragana && "0",
+                      }}
+                    >
+                      Hiragana: {i.hiragana}
+                    </li>
+                    <li
+                      style={{
+                        opacity: !anhien.nghia && "0",
+                      }}
+                    >
+                      Nghĩa: {i.nghia}
+                    </li>
+                  </ul>
+                </div>
+              );
+            })}
       </div>
     </Modal>
   );
@@ -377,6 +395,15 @@ export default function Language() {
                 }
                 src={icon.add.src}
               />
+            </span>
+            <span>
+              <li
+                onClick={() =>
+                  setOpen({ open: true, type: "bothu", title: "Bộ thủ kanji" })
+                }
+              >
+                Bộ thủ kanji
+              </li>{" "}
             </span>
             <span>
               <li
