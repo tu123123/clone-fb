@@ -43,7 +43,7 @@ const ModalContent = ({ open, onclose }: { open: any; onclose: any }) => {
         {open.type == "bothu"
           ? kanjibasic.map((i, index) => {
               return (
-                <div className="tuvung-item">
+                <div key={index} className="tuvung-item">
                   {index + 1}
                   <p>{i.kanji}</p>
                   <ul
