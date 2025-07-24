@@ -57,7 +57,7 @@ const ModalContent = ({ open, onclose }: { open: any; onclose: any }) => {
                 </div>
               );
             })
-          : data[open.type]?.map((i: any, index: number) => {
+          : data[`${open.type}${open.lv||''}`]?.map((i: any, index: number) => {
               let clickitem: any = null;
               return open.type == "nguphap" ? (
                 <div
@@ -151,7 +151,7 @@ const ModalAdd = ({ open, onclose }: { open: any; onclose: any }) => {
               "language",
               "T25lMOEuJ1MtlCmeC5yU",
               {
-                [open.type]: data[open.type]
+                [`${open.type}${open.lv||''}`]: data[`${open.type}${open.lv||''}`]
                   ? [...data[open.type], itemadd]
                   : [itemadd],
               },
@@ -299,6 +299,7 @@ export default function Language() {
   const [openAdd, setOpenAdd] = useState({
     open: false,
     type: "",
+
     title: "",
   });
   const [data, setData] = useState();
@@ -380,6 +381,7 @@ export default function Language() {
           >
             Cấp độ N3
           </div>
+        
           <ul>
             <span>
               <li
@@ -437,6 +439,77 @@ export default function Language() {
               <img
                 onClick={() =>
                   setOpenAdd({ open: true, type: "nguphap", title: "Ngữ pháp" })
+                }
+                src={icon.add.src}
+              />
+            </span>
+          </ul>
+        </div>
+          <div className="Language-group">
+          <div
+
+            className="g-title"
+          >
+            Cấp độ N2
+          </div>
+        
+          <ul>
+            <span>
+              <li
+                onClick={() =>
+                  setOpen({ open: true, type: "tuvung", title: "Từ vựng" ,lv:'n2'})
+                }
+              >
+                Từ vựng
+              </li>{" "}
+              <img
+                onClick={() =>
+                  setOpenAdd({ open: true, type: "tuvung", title: "Từ vựng",lv:'n2'})
+                }
+                src={icon.add.src}
+              />
+            </span>
+            <span>
+              <li
+                onClick={() =>
+                  setOpen({ open: true, type: "bothu", title: "Bộ thủ kanji",lv:'n2' })
+                }
+              >
+                Bộ thủ kanji
+              </li>{" "}
+            </span>
+            <span>
+              <li
+                onClick={() =>
+                  setOpen({ open: true, type: "kanji", title: "Kanji" ,lv:'n2'})
+                }
+              >
+                Kanji
+              </li>{" "}
+              <img
+                onClick={() =>
+                  setOpenAdd({ open: true, type: "kanji", title: "Kanji" ,lv:'n2'})
+                }
+                src={icon.add.src}
+              />
+              <img
+                onClick={() =>
+                  setOpentest({ open: true, type: "kanji", title: "Kanji",lv:'n2' })
+                }
+                src={icon.test.src}
+              />
+            </span>
+            <span>
+              <li
+                onClick={() =>
+                  setOpen({ open: true, type: "nguphap", title: "Ngữ pháp" ,lv:'n2'})
+                }
+              >
+                Ngữ pháp
+              </li>{" "}
+              <img
+                onClick={() =>
+                  setOpenAdd({ open: true, type: "nguphap", title: "Ngữ pháp" ,lv:'n2'})
                 }
                 src={icon.add.src}
               />
