@@ -57,7 +57,7 @@ const ModalContent = ({ open, onclose }: { open: any; onclose: any }) => {
                 </div>
               );
             })
-          : data[`${open.type}${open.lv||''}`]?.map((i: any, index: number) => {
+          : data&&data[`${open.type}${open.lv||''}`]?.map((i: any, index: number) => {
               let clickitem: any = null;
               return open.type == "nguphap" ? (
                 <div
@@ -118,6 +118,7 @@ const ModalContent = ({ open, onclose }: { open: any; onclose: any }) => {
 
 const ModalAdd = ({ open, onclose }: { open: any; onclose: any }) => {
   const { data, setLd } = useContext(languageContext);
+
   const tuvung = {
     value: "",
     nghia: "",
@@ -135,6 +136,7 @@ const ModalAdd = ({ open, onclose }: { open: any; onclose: any }) => {
     name: "",
     id: v4(),
   };
+    console.log(open)
   return (
     <Modal
       groupButton={
@@ -152,7 +154,7 @@ const ModalAdd = ({ open, onclose }: { open: any; onclose: any }) => {
               "T25lMOEuJ1MtlCmeC5yU",
               {
                 [`${open.type}${open.lv||''}`]: data[`${open.type}${open.lv||''}`]
-                  ? [...data[open.type], itemadd]
+                  ? [...data[`${open.type}${open.lv||''}`], itemadd]
                   : [itemadd],
               },
               () => {
