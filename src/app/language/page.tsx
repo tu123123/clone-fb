@@ -10,6 +10,7 @@ import { button } from "@/component/button/button";
 import Loading from "@/component/loading/loading";
 import { file, kanjibasic } from "./file";
 import DocViewer from "react-doc-viewer";
+import PdfViewer from "@/component/PDF/pdf";
 const languageContext = createContext<any>({});
 const ModalContent = ({ open, onclose }: { open: any; onclose: any }) => {
   const { data, setLd } = useContext(languageContext);
@@ -136,7 +137,7 @@ const ModalAdd = ({ open, onclose }: { open: any; onclose: any }) => {
     name: "",
     id: v4(),
   };
-    console.log(open)
+
   return (
     <Modal
       groupButton={
@@ -251,7 +252,7 @@ const FlashCard = ({ open, onclose }: { onclose: any; open: any }) => {
             nghĩa
           </Button>
           <div>
-            {data[open.type].length}/{index + 1}
+            {data[open.type+open.lv].length}/{index + 1}
           </div>
           <Button
             onClick={() => {
@@ -266,7 +267,7 @@ const FlashCard = ({ open, onclose }: { onclose: any; open: any }) => {
           </Button>
           <Button
             onClick={() => {
-              if (data[open.type].length > index + 1) {
+              if (data[open.type+open.lv].length > index + 1) {
                 setIndex(index + 1);
 
                 setopenmota({ nghia: false, hiragana: false });
@@ -280,12 +281,12 @@ const FlashCard = ({ open, onclose }: { onclose: any; open: any }) => {
       onClose={onclose}
       title={open.title}
     >
-      <div className="Flashcard">{data && data[open.type][index].value}</div>
+      <div className="Flashcard">{data && data[open.type+open.lv][index].value}</div>
       {openmota.hiragana && (
-        <div className="mota">Hiragana:{data[open.type][index].hiragana}</div>
+        <div className="mota">Hiragana:{data[open.type+open.lv][index].hiragana}</div>
       )}
       {openmota.nghia && (
-        <div className="mota">Nghĩa:{data[open.type][index].nghia}</div>
+        <div className="mota">Nghĩa:{data[open.type+open.lv][index].nghia}</div>
       )}
     </Modal>
   );
@@ -307,12 +308,14 @@ export default function Language() {
   const [data, setData] = useState();
   useEffect(() => {
     getData("language", (e: any) => {
+      console.log(e)
       setData(e[0]);
     });
   }, []);
 
   return (
     <languageContext.Provider value={{ data: data, setLd }}>
+     
       {opentest.open && (
         <FlashCard
           open={opentest}
@@ -412,20 +415,20 @@ export default function Language() {
             <span>
               <li
                 onClick={() =>
-                  setOpen({ open: true, type: "kanji", title: "Kanji" })
+                  setOpen({ open: true, type: "kanji", title: "Kanji" ,lv:''})
                 }
               >
                 Kanji
               </li>{" "}
               <img
                 onClick={() =>
-                  setOpenAdd({ open: true, type: "kanji", title: "Kanji" })
+                  setOpenAdd({ open: true, type: "kanji", title: "Kanji" ,lv:''})
                 }
                 src={icon.add.src}
               />
               <img
                 onClick={() =>
-                  setOpentest({ open: true, type: "kanji", title: "Kanji" })
+                  setOpentest({ open: true, type: "kanji", title: "Kanji",lv:'' })
                 }
                 src={icon.test.src}
               />
@@ -433,14 +436,14 @@ export default function Language() {
             <span>
               <li
                 onClick={() =>
-                  setOpen({ open: true, type: "nguphap", title: "Ngữ pháp" })
+                  setOpen({ open: true, type: "nguphap", title: "Ngữ pháp",lv:'' })
                 }
               >
                 Ngữ pháp
               </li>{" "}
               <img
                 onClick={() =>
-                  setOpenAdd({ open: true, type: "nguphap", title: "Ngữ pháp" })
+                  setOpenAdd({ open: true, type: "nguphap", title: "Ngữ pháp" ,lv:''})
                 }
                 src={icon.add.src}
               />

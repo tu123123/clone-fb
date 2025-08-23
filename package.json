@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@types/js-cookie": "^3.0.6",
+    "@types/pdfjs-dist": "^2.10.378",
     "@types/uuid": "^9.0.8",
     "antd": "^5.16.4",
     "antd-img-crop": "^4.21.0",
@@ -25,6 +26,8 @@
     "sass": "^1.75.0",
     "socket.io": "^4.7.5",
     "socket.io-client": "^4.7.5",
+    "tesseract.js": "^6.0.1",
+    "tesseract.js-core": "^6.0.0",
     "uuid": "^9.0.1"
   },
   "devDependencies": {
